@@ -40,6 +40,8 @@ getdistro() {
 	elif [ "${OS}" == "FreeBSD" ]; then
 		if [ -f /etc/platform -o -f /etc/version ]; then
 			DISTRO="pfSense"
+		elif [ $(pbreg get /PC-BSD/SysType 2>/dev/null) ]; then
+			DISTRO=$(pbreg get /PC-BSD/SysType)
 		fi
 	fi
 	export DISTRO
@@ -56,6 +58,10 @@ getversion() {
 	elif [ "${OS}" == "FreeBSD" ]; then
 		if [ "${DISTRO}" == "pfSense" ]; then
 			export VERSION=$(cat /etc/version)
+		elif [ "${DISTRO}" == "PC-BSD" ]; then
+			export VERSION=$(pbreg get /PC-BSD/Version)
+		elif [ "${DISTRO}" == "TrueOS" ]; then
+			export VERSION=$(pbreg get /PC-BSD/Version)
 		fi
 	else
 		return
@@ -90,7 +96,10 @@ case $(uname -s) in
 		;;
 	*)
 		# No idea what it is, kill them with fire
-		echo "NOPE NOPE NOPE"
+		echo "Unsupported"
+		exit 1
 esac
 
 echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}"
+
+exit 0
