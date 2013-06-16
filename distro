@@ -19,23 +19,22 @@ getdistro() {
 			DISTRO="ArchLinux"
 		elif [ -f /etc/SuSE-release ]; then
 			DISTRO="SuSE"
-		elif [ -f /etc/mandrake-release ] ; then
+		elif [ -f /etc/mandrake-release ]; then
 			DISTRO="Mandrake"
-		elif [ -f /etc/debian_version ] ; then
+		elif [ -f /etc/debian_version ]; then
 			# shit based on debian
 			if [ -f /etc/mailcleaner/etc/mailcleaner/version.def ]; then
 				DISTRO="MailCleaner"
 			else
 				DISTRO="Debian"
 			fi
-		elif [ -f /etc/UnitedLinux-release ] ; then
+		elif [ -f /etc/UnitedLinux-release ]; then
 			DISTRO="UnitedLinux"
-		elif [ -f /etc/lsb-release ] ; then
-			LSB_DIST="`cat /etc/lsb-release | grep DISTRIB_ID | cut -d "=" -f2`"
-			LSB_REV="`cat /etc/lsb-release | grep DISTRIB_RELEASE | cut -d "=" -f2`"
-			if [ "$LSB_DIST" != "" ] ; then
-				DISTRO=$LSB_DIST
-			fi
+		else
+			DISTRO=$(lsb_release -si)
+		fi
+		if [ -z "${DISTRO}" ]; then
+			DISTRO="Unknown"
 		fi
 	elif [ "${OS}" == "FreeBSD" ]; then
 		if [ -f /etc/platform -o -f /etc/version ]; then
@@ -52,7 +51,6 @@ getarch() {
 }
 
 getversion() {
-	# basically a no-op
 	if [ "${OS}" == "AIX" ]; then
 		export VERSION=$(oslevel -r)
 	elif [ "${OS}" == "FreeBSD" ]; then
