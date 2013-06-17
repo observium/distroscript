@@ -3,10 +3,11 @@
 
 getkernel() {
 	if [ "${OS}" == "AIX" ]; then
-		export KERNEL=$(oslevel)
+		KERNEL=$(oslevel)
 	else
-		export KERNEL=$(uname -r)
+		KERNEL=$(uname -r)
 	fi
+	export KERNEL
 }
 
 getdistro() {
@@ -41,29 +42,41 @@ getdistro() {
 			DISTRO="pfSense"
 		elif [ $(pbreg get /PC-BSD/SysType 2>/dev/null) ]; then
 			DISTRO=$(pbreg get /PC-BSD/SysType)
+		else
+			DISTRO=$(uname -i)
 		fi
 	fi
 	export DISTRO
 }
 
 getarch() {
-	export ARCH=$(uname -m)
+	if [ "${OS}" == "Solaris" ]; then
+		ARCH=$(uname -p)
+	else
+		ARCH=$(uname -m)
+	fi
+	export ARCH
 }
 
 getversion() {
 	if [ "${OS}" == "AIX" ]; then
-		export VERSION=$(oslevel -r)
+		VERSION=$(oslevel -r)
 	elif [ "${OS}" == "FreeBSD" ]; then
 		if [ "${DISTRO}" == "pfSense" ]; then
-			export VERSION=$(cat /etc/version)
+			VERSION=$(cat /etc/version)
 		elif [ "${DISTRO}" == "PC-BSD" ]; then
-			export VERSION=$(pbreg get /PC-BSD/Version)
+			VERSION=$(pbreg get /PC-BSD/Version)
 		elif [ "${DISTRO}" == "TrueOS" ]; then
-			export VERSION=$(pbreg get /PC-BSD/Version)
+			VERSION=$(pbreg get /PC-BSD/Version)
 		fi
-	else
-		return
+	elif [ "${OS}" == "Linux" ]; then
+		if [ "${DISTRO}" == "Redhat" ]; then
+			# nope
+		else
+			VERSION="Unknown"
+		fi
 	fi
+	export VERSION
 }
 
 case $(uname -s) in
@@ -72,6 +85,7 @@ case $(uname -s) in
 		getkernel
 		getarch
 		getdistro
+		getversion
 		;;
 	SunOS)
 		OS="Solaris"
