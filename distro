@@ -1,5 +1,5 @@
 #!/bin/sh
-# Returns tab deliminated output for OS/Kernel/Arch/Distro/Version
+# Returns pipe deliminated output for OS/Kernel/Arch/Distro/Version
 
 getkernel() {
 	if [ "${OS}" == "AIX" ]; then
@@ -99,6 +99,12 @@ case $(uname -s) in
 		getkernel
 		getarch
 		getdistro
+		getversion
+		;;
+	OpenBSD)
+		OS="OpenBSD"
+		getkernel
+		getarch
 		getversion
 		;;
 	AIX)
