@@ -1,5 +1,12 @@
 #!/bin/sh
-# Returns pipe deliminated output for OS/Kernel/Arch/Distro/Version
+# Evil kludge, but shells are made of dicks.
+if [ "$0" == "distro" -o "$0" == "./distro" ]; then
+	SOURCED=0
+else
+	SOURCED=1
+fi
+
+DISTROSCRIPT="0.9"
 
 getkernel() {
 	if [ "${OS}" == "AIX" ]; then
@@ -8,6 +15,7 @@ getkernel() {
 		KERNEL=$(uname -r)
 	fi
 	export KERNEL
+	return 0
 }
 
 getdistro() {
@@ -15,7 +23,7 @@ getdistro() {
 		if [ -f /etc/redhat-release ]; then
 			DISTRO=$(cat /etc/redhat-release | awk '{print $1}')
 			if [ "${DISTRO}" == "Red" ]; then
-				DISTRO="Redhat"
+				DISTRO="RedHat"
 			fi
 		elif [ -f /etc/mandriva-release ]; then
 			DISTRO="Mandriva"
@@ -54,15 +62,26 @@ getdistro() {
 		DISTRO=
 	fi
 	export DISTRO
+	return 0
 }
 
 getarch() {
 	if [ "${OS}" == "Solaris" ]; then
-		ARCH=$(uname -p)
+		if [ $(isainfo | grep -c amd64) -eq 1 ]; then
+			ARCH="amd64"
+		else
+			ARCH=$(isainfo)
+		fi
 	else
 		ARCH=$(uname -m)
 	fi
+	if [ "${OS}" == "Linux" ]; then
+		if [ "${ARCH}" == "x86_64" ]; then
+			ARCH="amd64"
+		fi
+	fi
 	export ARCH
+	return 0
 }
 
 getversion() {
@@ -81,54 +100,56 @@ getversion() {
 	elif [ "${OS}" == "OpenBSD" ]; then
 		VERSION=$(uname -v)
 	elif [ "${OS}" == "Linux" ]; then
-		if [ "${DISTRO}" == "Redhat" ]; then
+		if [ "${DISTRO}" == "RedHat" ]; then
 			VERSION=$(cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//')
 		else
-			VERSION=
+			VERSION=$(lsb_release -ri)
 		fi
 	fi
 	export VERSION
+	return 0
 }
 
-case $(uname -s) in
-	Linux)
-		OS="Linux"
-		getkernel
-		getarch
-		getdistro
-		getversion
-		;;
-	SunOS)
-		OS="Solaris"
-		getkernel
-		getarch
-		getdistro
-		getversion
-		;;
-	FreeBSD)
-		OS="FreeBSD"
-		getkernel
-		getarch
-		getdistro
-		getversion
-		;;
-	OpenBSD)
-		OS="OpenBSD"
-		getkernel
-		getarch
-		getversion
-		;;
-	AIX)
-		OS="AIX"
-		getkernel
-		getversion
-		;;
-	*)
-		# No idea what it is, kill them with fire
-		echo "Unsupported"
-		exit 1
-esac
+if [ "${SOURCED}" -eq 0 ]; then
+	case $(uname -s) in
+		Linux)
+			OS="Linux"
+			getkernel
+			getarch
+			getdistro
+			getversion
+			;;
+		SunOS)
+			OS="Solaris"
+			getkernel
+			getarch
+			getdistro
+			getversion
+			;;
+		FreeBSD)
+			OS="FreeBSD"
+			getkernel
+			getarch
+			getdistro
+			getversion
+			;;
+		OpenBSD)
+			OS="OpenBSD"
+			getkernel
+			getarch
+			getversion
+			;;
+		AIX)
+			OS="AIX"
+			getkernel
+			getversion
+			;;
+		*)
+			# No idea what it is, kill them with fire
+			echo "Unsupported"
+			exit 1
+	esac
 
-echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}"
-
-exit 0
+	echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}"
+	exit 0
+fi
