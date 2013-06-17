@@ -46,10 +46,12 @@ getdistro() {
 		elif [ $(pbreg get /PC-BSD/SysType 2>/dev/null) ]; then
 			DISTRO=$(pbreg get /PC-BSD/SysType)
 		else
-			DISTRO=$(uname -i)
+			DISTRO=
 		fi
-	elif [ "${OS}" == "OpenBSD" ]; then
-		DISTRO=$(uname -i)
+	elif [ "${OS}" == "Solaris" ]; then
+		DISTRO=$(head -n 1 /etc/release | awk '{print $1}')
+	else
+		DISTRO=
 	fi
 	export DISTRO
 }
@@ -74,9 +76,11 @@ getversion() {
 		elif [ "${DISTRO}" == "TrueOS" ]; then
 			VERSION=$(pbreg get /PC-BSD/Version)
 		fi
+	elif [ "${OS}" == "OpenBSD" ]; then
+		VERSION=$(uname -v)
 	elif [ "${OS}" == "Linux" ]; then
 		if [ "${DISTRO}" == "Redhat" ]; then
-			
+			VERSION=$(cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//')
 		else
 			VERSION="Unknown"
 		fi
