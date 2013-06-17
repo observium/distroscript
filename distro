@@ -84,7 +84,7 @@ getversion() {
 		if [ "${DISTRO}" == "Redhat" ]; then
 			VERSION=$(cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//')
 		else
-			VERSION="Unknown"
+			VERSION=
 		fi
 	fi
 	export VERSION
