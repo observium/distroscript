@@ -43,7 +43,7 @@ getdistro() {
 		elif [ -f /etc/UnitedLinux-release ]; then
 			DISTRO="UnitedLinux"
 		else
-			DISTRO=$(lsb_release -si)
+			DISTRO=$(lsb_release -si 2>/dev/null)
 		fi
 		if [ -z "${DISTRO}" ]; then
 			DISTRO="Unknown"
@@ -103,7 +103,7 @@ getversion() {
 		if [ "${DISTRO}" == "RedHat" ]; then
 			VERSION=$(cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//')
 		else
-			VERSION=$(lsb_release -ri)
+			VERSION=$(lsb_release -ri 2>/dev/null)
 		fi
 	fi
 	export VERSION
