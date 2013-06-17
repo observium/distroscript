@@ -75,6 +75,8 @@ getversion() {
 			VERSION=$(pbreg get /PC-BSD/Version)
 		elif [ "${DISTRO}" == "TrueOS" ]; then
 			VERSION=$(pbreg get /PC-BSD/Version)
+		else
+			VERSION=$(uname -i)
 		fi
 	elif [ "${OS}" == "OpenBSD" ]; then
 		VERSION=$(uname -v)
