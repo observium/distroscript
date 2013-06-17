@@ -100,7 +100,7 @@ getversion() {
 	elif [ "${OS}" = "OpenBSD" ]; then
 		VERSION=$(uname -v)
 	elif [ "${OS}" = "Linux" ]; then
-		if [ "${DISTRO}" = "RedHat" ]; then
+		if [ -f /etc/redhat-release ]; then
 			VERSION=$(cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//')
 		else
 			VERSION=$(lsb_release -ri 2>/dev/null)
