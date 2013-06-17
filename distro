@@ -14,6 +14,9 @@ getdistro() {
 	if [ "${OS}" == "Linux" ]; then
 		if [ -f /etc/redhat-release ]; then
 			DISTRO=$(cat /etc/redhat-release | awk '{print $1}')
+			if [ "${DISTRO}" == "Red" ]; then
+				DISTRO="Redhat"
+			fi
 		elif [ -f /etc/mandriva-release ]; then
 			DISTRO="Mandriva"
 		elif [ -f /etc/arch-release ]; then
@@ -45,6 +48,8 @@ getdistro() {
 		else
 			DISTRO=$(uname -i)
 		fi
+	elif [ "${OS}" == "OpenBSD" ]; then
+		DISTRO=$(uname -i)
 	fi
 	export DISTRO
 }
@@ -71,7 +76,7 @@ getversion() {
 		fi
 	elif [ "${OS}" == "Linux" ]; then
 		if [ "${DISTRO}" == "Redhat" ]; then
-			# nope
+			
 		else
 			VERSION="Unknown"
 		fi
