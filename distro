@@ -6,7 +6,7 @@ else
 	SOURCED=1
 fi
 
-DISTROSCRIPT="0.11"
+DISTROSCRIPT="0.13"
 
 getkernel() {
 	if [ "${OS}" = "AIX" ]; then
@@ -51,8 +51,8 @@ getdistro() {
 	elif [ "${OS}" = "FreeBSD" ]; then
 		if [ -f /etc/platform -o -f /etc/version ]; then
 			DISTRO="pfSense"
-		elif [ $(pbreg get /PC-BSD/SysType 2>/dev/null) ]; then
-			DISTRO=$(pbreg get /PC-BSD/SysType)
+		elif [ -f /usr/local/bin/pbreg ]; then
+			DISTRO="PC-BSD"
 		else
 			DISTRO=
 		fi
@@ -91,8 +91,6 @@ getversion() {
 		if [ "${DISTRO}" = "pfSense" ]; then
 			VERSION=$(cat /etc/version)
 		elif [ "${DISTRO}" = "PC-BSD" ]; then
-			VERSION=$(pbreg get /PC-BSD/Version)
-		elif [ "${DISTRO}" = "TrueOS" ]; then
 			VERSION=$(pbreg get /PC-BSD/Version)
 		else
 			VERSION=$(uname -i)
