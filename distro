@@ -1,5 +1,5 @@
 #!/bin/sh
-# Evil, but shells are made of dicks.
+# Shells are made of dicks.
 if [ -z ${DISTROEXEC} ]; then
 	SOURCED=0
 else
@@ -49,10 +49,12 @@ getdistro() {
 			DISTRO="Unknown"
 		fi
 	elif [ "${OS}" = "FreeBSD" ]; then
-		if [ -f /etc/platform -o -f /etc/version ]; then
+		if [ -f /etc/platform -a -f /etc/version ]; then
 			DISTRO="pfSense"
 		elif [ -f /usr/local/bin/pbreg ]; then
 			DISTRO="PC-BSD"
+		elif [ -f /tmp/freenas_config.md5 ]; then
+			DISTRO="FreeNAS"
 		else
 			DISTRO=
 		fi
