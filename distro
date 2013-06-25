@@ -53,11 +53,7 @@ fi
 DISTROSCRIPT="0.13"
 
 getkernel() {
-	if [ "${OS}" = "AIX" ]; then
-		KERNEL=$(oslevel)
-	else
-		KERNEL=$(uname -r)
-	fi
+	KERNEL=$(uname -r)
 	export KERNEL
 	return 0
 }
@@ -133,9 +129,7 @@ getarch() {
 }
 
 getversion() {
-	if [ "${OS}" = "AIX" ]; then
-		VERSION=$(oslevel -r)
-	elif [ "${OS}" = "FreeBSD" ]; then
+	if [ "${OS}" = "FreeBSD" ]; then
 		if [ "${DISTRO}" = "pfSense" ]; then
 			VERSION=$(cat /etc/version)
 		elif [ "${DISTRO}" = "PC-BSD" ]; then
@@ -183,11 +177,6 @@ if [ -z ${DISTROEXEC} ]; then
 			OS="OpenBSD"
 			getkernel
 			getarch
-			getversion
-			;;
-		AIX)
-			OS="AIX"
-			getkernel
 			getversion
 			;;
 		*)

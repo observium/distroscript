@@ -31,7 +31,6 @@ Functions:
 
 Notes:
  * On FreeBSD and OpenBSD, where it is a generic install, the distro field is left blank and the distrover is populated with the kernel name.
- * AIX sucks, so there may be lots of blank fields.
  * x86_64 is normalised to amd64 on Linux.
  * ARCH may be incorrect on some Solaris installs due to the lack of a sane method for retrieving running bitness.
 
