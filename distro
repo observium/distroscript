@@ -50,7 +50,16 @@ else
 	SOURCED=1
 fi
 
-DISTROSCRIPT="0.13"
+DISTROSCRIPT="0.15"
+
+getos() {
+	OS=$(uname -s)
+	if [ "${OS}" = "SunOS" ]; then
+		OS="Solaris"
+	fi
+	export OS
+	return 0
+}
 
 getkernel() {
 	KERNEL=$(uname -r)
@@ -85,9 +94,6 @@ getdistro() {
 		elif [ -f /etc/UnitedLinux-release ]; then
 			DISTRO="UnitedLinux"
 		else
-			DISTRO=$(lsb_release -si 2>/dev/null)
-		fi
-		if [ -z "${DISTRO}" ]; then
 			DISTRO="Unknown"
 		fi
 	elif [ "${OS}" = "FreeBSD" ]; then

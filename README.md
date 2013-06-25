@@ -24,6 +24,7 @@ Variables:
 If information isn't available or applicable for any of the variables, they are left blank.
 
 Functions:
+ * getos - exports OS as the Operating System
  * getkernel - exports KERNEL as the kernel version
  * getarch - exports ARCH as the arch/platform
  * getdistro - exports DISTRO as the distribution
