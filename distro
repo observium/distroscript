@@ -64,7 +64,9 @@ getkernel() {
 
 getdistro() {
 	if [ "${OS}" = "Linux" ]; then
-		if [ -f /etc/redhat-release ]; then
+		if [ -f /usr/bin/lsb_release ]; then
+			DISTRO=$(/usr/bin/lsb_release -si 2>/dev/null)
+		elif [ -f /etc/redhat-release ]; then
 			DISTRO=$(cat /etc/redhat-release | awk '{print $1}')
 			if [ "${DISTRO}" = "Red" ]; then
 				DISTRO="RedHat"
@@ -103,7 +105,7 @@ getdistro() {
 			DISTRO=
 		fi
 	elif [ "${OS}" = "Solaris" ]; then
-		DISTRO=$(head -n 1 /etc/release | awk '{print $1}')
+ 		DISTRO=$(head -n 1 /etc/release | awk '{print $1}')
 	else
 		DISTRO=
 	fi
@@ -147,7 +149,7 @@ getversion() {
 		if [ -f /etc/redhat-release ]; then
 			VERSION=$(cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//')
 		else
-			VERSION=$(lsb_release -ri 2>/dev/null)
+			VERSION=$(lsb_release -sr 2>/dev/null)
 		fi
 	fi
 	export VERSION
