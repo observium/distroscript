@@ -42,20 +42,19 @@
 #
 # The Software and this license document are provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 # WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+#
+# URL: https://github.com/joeholden/distroscript/
+# README: https://raw.github.com/joeholden/distroscript/master/README.md
 
 # Shells are made of dicks.
-if [ -z ${DISTROEXEC} ]; then
-	SOURCED=0
-else
-	SOURCED=1
-fi
-
-DISTROSCRIPT="0.15"
+DISTROSCRIPT="0.17"
 
 getos() {
 	OS=$(uname -s)
 	if [ "${OS}" = "SunOS" ]; then
 		OS="Solaris"
+	elif [ "${OS}" = "DragonFly" ]; then
+		OS="DragonFlyBSD"
 	fi
 	export OS
 	return 0
@@ -135,7 +134,7 @@ getarch() {
 }
 
 getversion() {
-	if [ "${OS}" = "FreeBSD" ]; then
+	if [ "${OS}" = "FreeBSD" -o "${OS}" = "DragonFlyBSD" ]; then
 		if [ "${DISTRO}" = "pfSense" ]; then
 			VERSION=$(cat /etc/version)
 		elif [ "${DISTRO}" = "PC-BSD" ]; then
@@ -143,7 +142,7 @@ getversion() {
 		else
 			VERSION=$(uname -i)
 		fi
-	elif [ "${OS}" = "OpenBSD" ]; then
+	elif [ "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
 		VERSION=$(uname -v)
 	elif [ "${OS}" = "Linux" ]; then
 		if [ -f /etc/redhat-release ]; then
@@ -181,6 +180,18 @@ if [ -z ${DISTROEXEC} ]; then
 			;;
 		OpenBSD)
 			OS="OpenBSD"
+			getkernel
+			getarch
+			getversion
+			;;
+		NetBSD)
+			OS="NetBSD"
+			getkernel
+			getarch
+			getversion
+			;;
+		DragonFly)
+			OS="DragonFlyBSD"
 			getkernel
 			getarch
 			getversion
