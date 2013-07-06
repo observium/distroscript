@@ -117,7 +117,6 @@ getdistro() {
 getarch() {
 	if [ "${OS}" = "Solaris" ]; then
 			ARCH=`isainfo -k`
-		fi
 	else
 		ARCH=`uname -m`
 	fi
