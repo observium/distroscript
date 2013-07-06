@@ -50,7 +50,7 @@
 DISTROSCRIPT="0.17"
 
 getos() {
-	OS=$(uname -s)
+	OS=`uname -s`
 	if [ "${OS}" = "SunOS" ]; then
 		OS="Solaris"
 	elif [ "${OS}" = "DragonFly" ]; then
@@ -61,7 +61,7 @@ getos() {
 }
 
 getkernel() {
-	KERNEL=$(uname -r)
+	KERNEL=`uname -r`
 	export KERNEL
 	return 0
 }
@@ -69,9 +69,9 @@ getkernel() {
 getdistro() {
 	if [ "${OS}" = "Linux" ]; then
 		if [ -f /usr/bin/lsb_release ]; then
-			DISTRO=$(/usr/bin/lsb_release -si 2>/dev/null)
+			DISTRO=`/usr/bin/lsb_release -si 2>/dev/null`
 		elif [ -f /etc/redhat-release ]; then
-			DISTRO=$(cat /etc/redhat-release | awk '{print $1}')
+			DISTRO=`cat /etc/redhat-release | awk '{print $1}'`
 			if [ "${DISTRO}" = "Red" ]; then
 				DISTRO="RedHat"
 			fi
@@ -106,7 +106,7 @@ getdistro() {
 			DISTRO=
 		fi
 	elif [ "${OS}" = "Solaris" ]; then
- 		DISTRO=$(head -n 1 /etc/release | awk '{print $1}')
+ 		DISTRO=`head -n 1 /etc/release | awk '{print $1}'`
 	else
 		DISTRO=
 	fi
@@ -116,13 +116,10 @@ getdistro() {
 
 getarch() {
 	if [ "${OS}" = "Solaris" ]; then
-		if [ $(isainfo | grep -c amd64) -eq 1 ]; then
-			ARCH="amd64"
-		else
-			ARCH=$(isainfo)
+			ARCH=`isainfo -k`
 		fi
 	else
-		ARCH=$(uname -m)
+		ARCH=`uname -m`
 	fi
 	if [ "${OS}" = "Linux" ]; then
 		if [ "${ARCH}" = "x86_64" ]; then
@@ -136,19 +133,19 @@ getarch() {
 getversion() {
 	if [ "${OS}" = "FreeBSD" -o "${OS}" = "DragonFlyBSD" ]; then
 		if [ "${DISTRO}" = "pfSense" ]; then
-			VERSION=$(cat /etc/version)
+			VERSION=`cat /etc/version`
 		elif [ "${DISTRO}" = "PC-BSD" ]; then
-			VERSION=$(pbreg get /PC-BSD/Version)
+			VERSION=`pbreg get /PC-BSD/Version`
 		else
-			VERSION=$(uname -i)
+			VERSION=`uname -i`
 		fi
 	elif [ "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
-		VERSION=$(uname -v)
+		VERSION=`uname -v`
 	elif [ "${OS}" = "Linux" ]; then
 		if [ -f /etc/redhat-release ]; then
-			VERSION=$(cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//')
+			VERSION=`cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//'`
 		else
-			VERSION=$(lsb_release -sr 2>/dev/null)
+			VERSION=`lsb_release -sr 2>/dev/null`
 		fi
 	fi
 	export VERSION
@@ -156,7 +153,7 @@ getversion() {
 }
 
 if [ -z ${DISTROEXEC} ]; then
-	case $(uname -s) in
+	case `uname -s` in
 		Linux)
 			OS="Linux"
 			getkernel
