@@ -113,7 +113,7 @@ getdistro() {
 			DISTRO=
 		fi
 	elif [ "${OS}" = "Darwin" ]; then
-		if [ `uname -m` = "AppleTV*" ]; then
+		if [ `uname -m` =~ "AppleTV.*" ]; then
 			DISTRO="iOS"
 		else
 			DISTRO=
