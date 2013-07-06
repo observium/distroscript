@@ -47,7 +47,7 @@
 # README: https://raw.github.com/joeholden/distroscript/master/README.md
 
 # Shells are made of dicks.
-DISTROSCRIPT="0.20"
+DISTROSCRIPT="0.21"
 
 getos() {
 	OS=`uname -s`
@@ -126,6 +126,8 @@ getarch() {
 	if [ "${OS}" = "Linux" ]; then
 		if [ "${ARCH}" = "x86_64" ]; then
 			ARCH="amd64"
+		elif [ "${ARCH}" = "i486" -o "${ARCH}" = "i586" -o "${ARCH}" = "i686" ]; then
+			ARCH="i386"
 		fi
 	fi
 	export ARCH
