@@ -117,6 +117,7 @@ getdistro() {
 			DISTRO="iOS"
 		else
 			DISTRO=
+		fi
 	else
 		DISTRO=
 	fi
