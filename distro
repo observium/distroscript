@@ -170,9 +170,7 @@ getversion() {
 			VERSION=`lsb_release -sr 2>/dev/null`
 		fi
 	elif [ "${OS}" = "Darwin" ]; then
-		if [ "${DISTRO}" = "iOS" ]; then
-			VERSION=`grep -A1 ProductVersion /System/Library/CoreServices/SystemVersion.plist | tail -n 1 | sed 's/<string>//' | sed 's/<\/string>//' | sed 's/\t//'`
-		fi
+		VERSION=`sw_vers -productVersion`
 	fi
 	export VERSION
 	return 0
