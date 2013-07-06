@@ -107,6 +107,9 @@ getdistro() {
 		fi
 	elif [ "${OS}" = "Solaris" ]; then
  		DISTRO=`head -n 1 /etc/release | awk '{print $1}'`
+		if [ "${DISTRO}" = "Solaris" ]; then
+			DISTRO=
+		fi
 	else
 		DISTRO=
 	fi
