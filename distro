@@ -47,7 +47,7 @@
 # README: https://raw.github.com/joeholden/distroscript/master/README.md
 
 # Shells are made of dicks.
-DISTROSCRIPT="0.21"
+DISTROSCRIPT="0.22"
 
 getos() {
 	OS=`uname -s`
@@ -112,6 +112,11 @@ getdistro() {
 		if [ "${DISTRO}" = "Solaris" -o "${DISTRO}" = "Oracle" ]; then
 			DISTRO=
 		fi
+	elif [ "${OS}" = "Darwin" ]; then
+		if [ `uname -m` = "AppleTV*" ]; then
+			DISTRO="iOS"
+		else
+			DISTRO=
 	else
 		DISTRO=
 	fi
@@ -121,7 +126,9 @@ getdistro() {
 
 getarch() {
 	if [ "${OS}" = "Solaris" ]; then
-			ARCH=`isainfo -k`
+		ARCH=`isainfo -k`
+	elif [ "${OS}" = "Darwin" ]; then
+		ARCH=`uname -p`
 	else
 		ARCH=`uname -m`
 	fi
@@ -199,6 +206,13 @@ if [ -z ${DISTROEXEC} ]; then
 			OS="DragonFlyBSD"
 			getkernel
 			getarch
+			getversion
+			;;
+		Darwin)
+			OS="Darwin"
+			getkernel
+			getarch
+			getdistro
 			getversion
 			;;
 		*)
