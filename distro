@@ -47,7 +47,7 @@
 # README: https://raw.github.com/joeholden/distroscript/master/README.md
 
 # Shells are made of dicks.
-DISTROSCRIPT="0.17"
+DISTROSCRIPT="0.20"
 
 getos() {
 	OS=`uname -s`
@@ -107,7 +107,7 @@ getdistro() {
 		fi
 	elif [ "${OS}" = "Solaris" ]; then
  		DISTRO=`head -n 1 /etc/release | awk '{print $1}'`
-		if [ "${DISTRO}" = "Solaris" ]; then
+		if [ "${DISTRO}" = "Solaris" -o "${DISTRO}" = "Oracle" ]; then
 			DISTRO=
 		fi
 	else
