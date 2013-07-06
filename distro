@@ -92,6 +92,8 @@ getdistro() {
 			fi
 		elif [ -f /etc/UnitedLinux-release ]; then
 			DISTRO="UnitedLinux"
+		elif [ -f /etc/openwrt_version ]; then
+			DISTRO="OpenWRT"
 		else
 			DISTRO="Unknown"
 		fi
@@ -146,7 +148,9 @@ getversion() {
 	elif [ "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
 		VERSION=`uname -v`
 	elif [ "${OS}" = "Linux" ]; then
-		if [ -f /etc/redhat-release ]; then
+		if [ "${DISTRO}" = "OpenWRT" ]; then
+			VERSION=`cat /etc/openwrt_version`
+		elif [ -f /etc/redhat-release ]; then
 			VERSION=`cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//'`
 		else
 			VERSION=`lsb_release -sr 2>/dev/null`
