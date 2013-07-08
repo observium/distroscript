@@ -171,6 +171,8 @@ getversion() {
 		fi
 	elif [ "${OS}" = "Darwin" ]; then
 		VERSION=`sw_vers -productVersion`
+	elif [ "${OS}" = "Solaris" ]; then
+		VERSION=`uname -v`
 	fi
 	export VERSION
 	return 0
