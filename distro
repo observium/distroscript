@@ -47,7 +47,7 @@
 # README: https://raw.github.com/joeholden/distroscript/master/README.md
 
 # Shells are made of dicks.
-DISTROSCRIPT="1.0"
+DISTROSCRIPT="1.0.1"
 
 getos() {
 	OS=`uname -s`
@@ -68,7 +68,10 @@ getkernel() {
 
 getdistro() {
 	if [ "${OS}" = "Linux" ]; then
-		if [ -f /usr/bin/lsb_release ]; then
+		if [ -f /etc/os-release ]; then
+			. /etc/os-release
+			DISTRO=${NAME}
+		elif [ -f /usr/bin/lsb_release ]; then
 			DISTRO=`/usr/bin/lsb_release -si 2>/dev/null`
 		elif [ -f /etc/redhat-release ]; then
 			DISTRO=`cat /etc/redhat-release | awk '{print $1}'`
@@ -164,10 +167,15 @@ getversion() {
 	elif [ "${OS}" = "Linux" ]; then
 		if [ "${DISTRO}" = "OpenWRT" ]; then
 			VERSION=`cat /etc/openwrt_version`
+		elif [ -f /etc/os-release ]; then
+			. /etc/os-release
+			VERSION=${VERSION_ID}
 		elif [ -f /etc/redhat-release ]; then
 			VERSION=`cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//'`
-		else
+		elif [ -f /usr/bin/lsb_release ]; then
 			VERSION=`lsb_release -sr 2>/dev/null`
+		else
+			VERSION=
 		fi
 	elif [ "${OS}" = "Darwin" ]; then
 		VERSION=`sw_vers -productVersion`
