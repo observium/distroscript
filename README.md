@@ -5,8 +5,19 @@ Simple shell script to return os/distro info
 
 Fixes/Updates: pull request or joe@rewt.org.uk - cheers
 
+Versioning
+========
+
+Generally after every commit, or at least after a couple of moderate commits, I increment the version.
+
+When there are significant milestones I will likely create "releases" where the script as of release is bug free.
+
+ * master - use if you are brave, potential for disruptive changes.
+ * stable - only changes that I think are worthwhile and won't break compatibility.
+
+
 Usage
-======
+=====
 
 You can either include the script in your own application or execute it directly.
 Before sourcing the script, set $DISTROEXEC.

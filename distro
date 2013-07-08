@@ -47,7 +47,7 @@
 # README: https://raw.github.com/joeholden/distroscript/master/README.md
 
 # Shells are made of dicks.
-DISTROSCRIPT="0.22"
+DISTROSCRIPT="1.0"
 
 getos() {
 	OS=`uname -s`
