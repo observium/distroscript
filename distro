@@ -47,7 +47,7 @@
 # README: https://raw.github.com/joeholden/distroscript/master/README.md
 
 # Shells are made of dicks.
-DISTROSCRIPT="1.0.1"
+DISTROSCRIPT="1.0.2"
 
 getos() {
 	OS=`uname -s`
@@ -97,6 +97,8 @@ getdistro() {
 			DISTRO="UnitedLinux"
 		elif [ -f /etc/openwrt_version ]; then
 			DISTRO="OpenWRT"
+		elif [ -f /etc/slackware-version ]; then
+			DISTRO="Slackware"
 		else
 			DISTRO="Unknown"
 		fi
@@ -167,6 +169,8 @@ getversion() {
 	elif [ "${OS}" = "Linux" ]; then
 		if [ "${DISTRO}" = "OpenWRT" ]; then
 			VERSION=`cat /etc/openwrt_version`
+		elif [ "${DISTRO}" = "Slackware" ]; then
+			VERSION=`cat /etc/slackware-version | cut -d" " -f2`
 		elif [ -f /etc/os-release ]; then
 			. /etc/os-release
 			VERSION=${VERSION_ID}
