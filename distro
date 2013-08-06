@@ -173,7 +173,7 @@ getversion() {
 			VERSION=`cat /etc/slackware-version | cut -d" " -f2`
 		# Debian are a bunch of useless cunts - also see: dash
 		elif [ -f /etc/os-release ]; then
-			if [ ${DISTRO} = "Debian" ]; then
+			if [ "${DISTRO}" = "Debian" ]; then
 				if [ -f /usr/bin/lsb_release ]; then
 					VERSION=`lsb_release -sr 2>/dev/null`
 				else
