@@ -47,7 +47,7 @@
 # README: https://raw.github.com/joeholden/distroscript/master/README.md
 
 # Shells are made of dicks.
-DISTROSCRIPT="1.0.2"
+DISTROSCRIPT="1.0.3"
 
 getos() {
 	OS=`uname -s`
@@ -171,7 +171,15 @@ getversion() {
 			VERSION=`cat /etc/openwrt_version`
 		elif [ "${DISTRO}" = "Slackware" ]; then
 			VERSION=`cat /etc/slackware-version | cut -d" " -f2`
+		# Debian are a bunch of useless cunts - also see: dash
 		elif [ -f /etc/os-release ]; then
+			if [ ${DISTRO} = "Debian" ]; then
+				if [ -f /usr/bin/lsb_release ]; then
+					VERSION=`lsb_release -sr 2>/dev/null`
+				else
+					VERSION="DebianAreFuckTards: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=718902"
+				fi
+			fi
 			. /etc/os-release
 			VERSION=${VERSION_ID}
 		elif [ -f /etc/redhat-release ]; then
