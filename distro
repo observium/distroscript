@@ -82,6 +82,8 @@ getdistro() {
 			DISTRO="Mandriva"
 		elif [ -f /etc/arch-release ]; then
 			DISTRO="ArchLinux"
+		elif [ -f /etc/gentoo-release ]; then
+			DISTRO="Gentoo"
 		elif [ -f /etc/SuSE-release ]; then
 			DISTRO="SuSE"
 		elif [ -f /etc/mandrake-release ]; then
