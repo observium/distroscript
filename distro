@@ -199,59 +199,11 @@ getversion() {
 }
 
 if [ -z ${DISTROEXEC} ]; then
-	case `uname -s` in
-		Linux)
-			OS="Linux"
-			getkernel
-			getarch
-			getdistro
-			getversion
-			;;
-		SunOS)
-			OS="Solaris"
-			getkernel
-			getarch
-			getdistro
-			getversion
-			;;
-		FreeBSD)
-			OS="FreeBSD"
-			getkernel
-			getarch
-			getdistro
-			getversion
-			;;
-		OpenBSD)
-			OS="OpenBSD"
-			getkernel
-			getarch
-			getversion
-			;;
-		NetBSD)
-			OS="NetBSD"
-			getkernel
-			getarch
-			getversion
-			;;
-		DragonFly)
-			OS="DragonFlyBSD"
-			getkernel
-			getarch
-			getversion
-			;;
-		Darwin)
-			OS="Darwin"
-			getkernel
-			getarch
-			getdistro
-			getversion
-			;;
-		*)
-			# No idea what it is, kill them with fire
-			echo "Unsupported"
-			exit 1
-	esac
-
+	getos
+	getkernel
+	getarch
+	getdistro
+	getversion
 	echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}"
 	exit 0
 fi
