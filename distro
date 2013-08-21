@@ -47,7 +47,11 @@
 # README: https://raw.github.com/joeholden/distroscript/master/README.md
 
 # Shells are made of dicks.
-DISTROSCRIPT="1.0.3"
+DISTROSCRIPT="1.0.9"
+
+if [ -z ${DISTROFORMAT} ]; then
+	DISTROFORMAT="pipe"
+fi
 
 getos() {
 	OS=`uname -s`
@@ -206,6 +210,26 @@ if [ -z ${DISTROEXEC} ]; then
 	getarch
 	getdistro
 	getversion
-	echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}"
+	if [ "${DISTROFORMAT}" = "pipe" ]; then
+		echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}"
+	elif [ "${DISTROFORMAT}" = "ini" ]; then
+		echo "[distroscript]"
+		echo "  OS = ${OS}"
+		echo "  KERNEL = ${KERNEL}"
+		echo "  ARCH = ${ARCH}"
+		echo "  DISTRO = ${DISTRO}"
+		echo "  DISTROVER = ${VERSION}"
+		echo "  SCRIPTVER = ${DISTROSCRIPT}"
+	elif [ "${DISTROFORMAT}" = "export" ]; then
+		echo "OS=${OS}"
+		echo "KERNEL=${KERNEL}"
+		echo "ARCH=${ARCH}"
+		echo "DISTRO=${DISTRO}"
+		echo "DISTROVER=${VERSION}"
+		echo "SCRIPTVER=${DISTROSCRIPT}"
+	else
+		echo "Unsupported output format."
+		exit 1
+	fi
 	exit 0
 fi

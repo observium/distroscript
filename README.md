@@ -45,4 +45,7 @@ Notes:
  * On FreeBSD and OpenBSD, where it is a generic install, the distro field is left blank and the distrover is populated with the kernel name.
  * x86_64 is normalised to amd64 on Linux.
 
-Output if executing directly is in the format of OS|KERNEL|ARCH|DISTRO|DISTROVER
+Output:
+ * Default output is pipe deliminated: OS|KERNEL|ARCH|DISTRO|DISTROVER
+ * Possible output options are: pipe, ini, export
+ * Set DISTROFORMAT environment variable to change output.
