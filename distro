@@ -185,9 +185,10 @@ getversion() {
 				else
 					VERSION="DebianAreFuckTards: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=718902"
 				fi
+			else
+				. /etc/os-release
+				VERSION=${VERSION_ID}
 			fi
-			. /etc/os-release
-			VERSION=${VERSION_ID}
 		elif [ -f /etc/redhat-release ]; then
 			VERSION=`cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//'`
 		elif [ -f /usr/bin/lsb_release ]; then
