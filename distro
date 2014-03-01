@@ -47,7 +47,7 @@
 # README: https://raw.github.com/joeholden/distroscript/master/README.md
 
 # Shells are made of dicks.
-DISTROSCRIPT="1.0.9"
+DISTROSCRIPT="1.0.10"
 
 if [ -z ${DISTROFORMAT} ]; then
 	DISTROFORMAT="pipe"
@@ -173,6 +173,10 @@ getversion() {
 	elif [ "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
 		VERSION=`uname -v`
 	elif [ "${OS}" = "Linux" ]; then
+		# Totally fucking embarassing, they can't even get the basics right.
+		if [ "${DISTRO}" = "Debian GNU/Linux" ]; then
+			DISTRO="Debian"
+		fi
 		if [ "${DISTRO}" = "OpenWRT" ]; then
 			VERSION=`cat /etc/openwrt_version`
 		elif [ "${DISTRO}" = "Slackware" ]; then
@@ -180,10 +184,9 @@ getversion() {
 		# Debian are a bunch of useless cunts - also see: dash
 		elif [ -f /etc/os-release ]; then
 			if [ "${DISTRO}" = "Debian" ]; then
+				#  Debian really are the biggest bunch of spastics ever
 				if [ -f /usr/bin/lsb_release ]; then
 					VERSION=`lsb_release -sr 2>/dev/null`
-				else
-					VERSION="DebianAreFuckTards: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=718902"
 				fi
 			else
 				. /etc/os-release
