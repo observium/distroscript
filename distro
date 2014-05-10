@@ -53,7 +53,7 @@ if [ -z ${DISTROFORMAT} ]; then
 	DISTROFORMAT="pipe"
 fi
 
-if [ -n "${AGENT_LIBDIR}" ]; then
+if [ -n "${AGENT_LIBDIR}" -o -n "${MK_LIBDIR}" ]; then
 	# Set output for check_mk/observium agent
 	DISTROFORMAT="export"
 	echo "<<<distro>>>"
