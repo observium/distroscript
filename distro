@@ -47,10 +47,16 @@
 # README: https://raw.github.com/joeholden/distroscript/master/README.md
 
 # Shells are made of dicks.
-DISTROSCRIPT="1.0.10"
+DISTROSCRIPT="1.0.11"
 
 if [ -z ${DISTROFORMAT} ]; then
 	DISTROFORMAT="pipe"
+fi
+
+if [ -n ${AGENT_LIBDIR} ]; then
+	# Set output for check_mk/observium agent
+	DISTROFORMAT="export"
+	echo "<<<distro>>>"
 fi
 
 getos() {
@@ -207,6 +213,7 @@ getversion() {
 	export VERSION
 	return 0
 }
+
 
 if [ -z ${DISTROEXEC} ]; then
 	getos
