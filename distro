@@ -56,7 +56,6 @@ fi
 if [ -n "${AGENT_LIBDIR}" -o -n "${MK_LIBDIR}" ]; then
 	# Set output for check_mk/observium agent
 	DISTROFORMAT="export"
-	echo "<<<distro>>>"
 fi
 
 getos() {
@@ -227,6 +226,9 @@ if [ -z ${DISTROEXEC} ]; then
 	getarch
 	getdistro
 	getversion
+	if [ "${AGENT_LIBDIR}" -o "${MK_LIBDIR}" ]; then
+		echo "<<<distro>>>"
+	fi
 	if [ "${DISTROFORMAT}" = "pipe" ]; then
 		echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}"
 	elif [ "${DISTROFORMAT}" = "ini" ]; then
