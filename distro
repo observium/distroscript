@@ -131,11 +131,17 @@ getdistro() {
 		fi
 	elif [ "${OS}" = "Darwin" ]; then
 		case `uname -m` in
-			AppleTV*)
-				DISTRO="iOS"
+			AppleTV2*)
+				DISTRO="AppleTV2"
+			;;
+			AppleTV3*)
+				DISTRO="AppleTV3"
 				;;
 			iPhone*)
-				DISTRO="iOS"
+				DISTRO="iPhone"
+				;;
+			iPod*)
+				DISTRO="iPOD"
 				;;
 			*)
 				DISTRO="OSX"
