@@ -47,7 +47,7 @@
 # README: https://raw.github.com/joeholden/distroscript/master/README.md
 
 # Shells are made of dicks.
-DISTROSCRIPT="1.0.12"
+DISTROSCRIPT="1.0.14"
 
 if [ -z ${DISTROFORMAT} ]; then
 	DISTROFORMAT="pipe"

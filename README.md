@@ -5,6 +5,17 @@ Simple shell script to return os/distro info
 
 Fixes/Updates: pull request or joe@rewt.org.uk - cheers
 
+
+Wanted
+======
+
+Obviously to implement good support for all platforms I require at least uname outputs and/or any OS specific checks I can do, currently I need info for:
+
+* AIX
+* HP-UX
+* VxWorks
+* RTOS/QNX
+
 Versioning
 ========
 
