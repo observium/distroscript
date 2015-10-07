@@ -1,7 +1,7 @@
 #!/bin/sh
 # Observium License Version 1.0
 #
-# Copyright (c) 2013 Joe Holden
+# Copyright (c) 2015 Joe Holden
 #
 # The intent of this license is to establish the freedom to use, share and contribute to
 # the software regulated by this license.
@@ -130,17 +130,14 @@ getdistro() {
 		fi
 	elif [ "${OS}" = "Darwin" ]; then
 		case `uname -m` in
-			AppleTV2*)
-				DISTRO="AppleTV2"
-			;;
-			AppleTV3*)
-				DISTRO="AppleTV3"
+			AppleTV*)
+				DISTRO="AppleTV"
 				;;
 			iPhone*)
 				DISTRO="iPhone"
 				;;
 			iPod*)
-				DISTRO="iPOD"
+				DISTRO="iPod"
 				;;
 			*)
 				DISTRO="OSX"
@@ -184,7 +181,6 @@ getversion() {
 	elif [ "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
 		VERSION=`uname -v`
 	elif [ "${OS}" = "Linux" ]; then
-		# Totally fucking embarassing, they can't even get the basics right.
 		if [ "${DISTRO}" = "Debian GNU/Linux" ]; then
 			DISTRO="Debian"
 		fi
@@ -195,7 +191,6 @@ getversion() {
 		# Debian are a bunch of useless cunts - also see: dash
 		elif [ -f /etc/os-release ]; then
 			if [ "${DISTRO}" = "Debian" ]; then
-				#  Debian really are the biggest bunch of spastics ever
 				if [ -f /usr/bin/lsb_release ]; then
 					VERSION=`lsb_release -sr 2>/dev/null`
 				fi
