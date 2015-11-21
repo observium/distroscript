@@ -1,6 +1,7 @@
 Observium License Version 1.0
+=============================
 
-Copyright (c) 2013 Joe Holden
+Copyright (c) 2013-2015 Joe Holden, (c) 2015 Mike Stupalov
 
 The intent of this license is to establish the freedom to use, share and contribute to
 the software regulated by this license.
@@ -42,6 +43,5 @@ No Warranty
 The Software and this license document are provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
-URL: https://github.com/joeholden/distroscript/
-README: https://raw.github.com/joeholden/distroscript/master/README.md
-
+URL: [https://github.com/joeholden/distroscript]
+README: [https://github.com/joeholden/distroscript/blob/master/README.md]
