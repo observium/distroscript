@@ -43,5 +43,6 @@ No Warranty
 The Software and this license document are provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
-URL: [https://github.com/joeholden/distroscript]
-README: [https://github.com/joeholden/distroscript/blob/master/README.md]
+URL: https://github.com/joeholden/distroscript
+
+README: https://github.com/joeholden/distroscript/blob/master/README.md
