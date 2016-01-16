@@ -1,7 +1,7 @@
 Observium License Version 1.0
 =============================
 
-Copyright (c) 2013-2015 Joe Holden, (c) 2015 Mike Stupalov
+Copyright (c) 2013-2016 Joe Holden, (c) 2015 Mike Stupalov
 
 The intent of this license is to establish the freedom to use, share and contribute to
 the software regulated by this license.

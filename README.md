@@ -1,11 +1,7 @@
 distroscript
 ============
 
-<<<<<<< HEAD
-Simple shell script to return os/distro info
-=======
 Simple shell script to return os/distro/version info
->>>>>>> 7b3790895dc37ee8b3dae2d58db95bbad7881162
 
 Pull requests welcome!
 

@@ -1,11 +1,6 @@
 #!/bin/sh
 #
-<<<<<<< HEAD
-# Copyright (c) 2015 Joe Holden
-=======
 #	Observium License Version 1.0
-#	=============================
->>>>>>> 7b3790895dc37ee8b3dae2d58db95bbad7881162
 #
 #	Copyright (c) 2013-2015 Joe Holden, (c) 2015 Mike Stupalov
 #
@@ -215,12 +210,9 @@ getdistro() {
 		case `uname -m` in
 			AppleTV*)
 				DISTRO="AppleTV"
-<<<<<<< HEAD
-=======
 			;;
 			iPad*)
 				DISTRO="iPad"
->>>>>>> 7b3790895dc37ee8b3dae2d58db95bbad7881162
 				;;
 			iPhone*)
 				DISTRO="iPhone"
@@ -279,18 +271,13 @@ getversion() {
 	elif [ "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
 		VERSION=`uname -r`
 	elif [ "${OS}" = "Linux" ]; then
-<<<<<<< HEAD
 		if [ "${DISTRO}" = "Debian GNU/Linux" ]; then
 			DISTRO="Debian"
 		fi
-=======
->>>>>>> 7b3790895dc37ee8b3dae2d58db95bbad7881162
 		if [ "${DISTRO}" = "OpenWRT" ]; then
 			VERSION=`cat /etc/openwrt_version`
 		elif [ "${DISTRO}" = "Slackware" ]; then
 			VERSION=`cat /etc/slackware-version | cut -d" " -f2`
-<<<<<<< HEAD
-		# Debian are a bunch of useless cunts - also see: dash
 		elif [ -f /etc/os-release ]; then
 			if [ "${DISTRO}" = "Debian" ]; then
 				if [ -f /usr/bin/lsb_release ]; then
@@ -300,8 +287,6 @@ getversion() {
 				. /etc/os-release
 				VERSION=${VERSION_ID}
 			fi
-=======
->>>>>>> 7b3790895dc37ee8b3dae2d58db95bbad7881162
 		elif [ -f /etc/redhat-release ]; then
 			VERSION=`cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//'`
 		elif [ -x /usr/bin/lsb_release ]; then
