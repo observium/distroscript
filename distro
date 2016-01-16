@@ -1,53 +1,59 @@
 #!/bin/sh
-# Observium License Version 1.0
 #
+<<<<<<< HEAD
 # Copyright (c) 2015 Joe Holden
+=======
+#	Observium License Version 1.0
+#	=============================
+>>>>>>> 7b3790895dc37ee8b3dae2d58db95bbad7881162
 #
-# The intent of this license is to establish the freedom to use, share and contribute to
-# the software regulated by this license.
+#	Copyright (c) 2013-2015 Joe Holden, (c) 2015 Mike Stupalov
 #
-# This license applies to any software containing a notice placed by the copyright holder
-# saying that it may be distributed under the terms of this license. Such software is herein
-# referred to as the Software. This license covers modification and distribution of the
-# Software.
+#	The intent of this license is to establish the freedom to use, share and contribute to
+#	the software regulated by this license.
 #
-# Granted Rights
+#	This license applies to any software containing a notice placed by the copyright holder
+#	saying that it may be distributed under the terms of this license. Such software is herein
+#	referred to as the Software. This license covers modification and distribution of the
+#	Software.
 #
-# 1. You are granted the non-exclusive rights set forth in this license provided you agree to
-#    and comply with any and all conditions in this license. Whole or partial distribution of the
-#    Software, or software items that link with the Software, in any form signifies acceptance of
-#    this license.
+#	Granted Rights
 #
-# 2. You may copy and distribute the Software in unmodified form provided that the entire package,
-#    including - but not restricted to - copyright, trademark notices and disclaimers, as released
-#    by the initial developer of the Software, is distributed.
+#	1. You are granted the non-exclusive rights set forth in this license provided you agree to
+#		 and comply with any and all conditions in this license. Whole or partial distribution of the
+#		 Software, or software items that link with the Software, in any form signifies acceptance of
+#		 this license.
 #
-# 3. You may make modifications to the Software and distribute your modifications, in a form that
-#    is separate from the Software, such as patches. The following restrictions apply to modifications:
+#	2. You may copy and distribute the Software in unmodified form provided that the entire package,
+#		 including - but not restricted to - copyright, trademark notices and disclaimers, as released
+#		 by the initial developer of the Software, is distributed.
 #
-#    a. Modifications must not alter or remove any copyright notices in the Software.
-#    b. When modifications to the Software are released under this license, a non-exclusive royalty-free
-#       right is granted to the initial developer of the Software to distribute your modification in
-#       future versions of the Software provided such versions remain available under these terms in
-#       addition to any other license(s) of the initial developer.
+#	3. You may make modifications to the Software and distribute your modifications, in a form that
+#		 is separate from the Software, such as patches. The following restrictions apply to modifications:
 #
-# Limitations of Liability
+#		 a. Modifications must not alter or remove any copyright notices in the Software.
+#		 b. When modifications to the Software are released under this license, a non-exclusive royalty-free
+#				right is granted to the initial developer of the Software to distribute your modification in
+#				future versions of the Software provided such versions remain available under these terms in
+#				addition to any other license(s) of the initial developer.
 #
-# In no event shall the initial developers or copyright holders be liable for any damages whatsoever,
-# including - but not restricted to - lost revenue or profits or other direct, indirect, special,
-# incidental or consequential damages, even if they have been advised of the possibility of such damages,
-# except to the extent invariable law, if any, provides otherwise.
+#	Limitations of Liability
 #
-# No Warranty
+#	In no event shall the initial developers or copyright holders be liable for any damages whatsoever,
+#	including - but not restricted to - lost revenue or profits or other direct, indirect, special,
+#	incidental or consequential damages, even if they have been advised of the possibility of such damages,
+#	except to the extent invariable law, if any, provides otherwise.
 #
-# The Software and this license document are provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-# WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+#	No Warranty
 #
-# URL: https://github.com/joeholden/distroscript/
-# README: https://raw.github.com/joeholden/distroscript/master/README.md
+#	The Software and this license document are provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+#	WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+#
+#	URL: [https://github.com/joeholden/distroscript]
+#	README: [https://github.com/joeholden/distroscript/blob/master/README.md]
 
-# Shells are made of dicks.
-DISTROSCRIPT="1.0.14"
+# Script version
+DISTROSCRIPT="1.1.0"
 
 if [ -z ${DISTROFORMAT} ]; then
 	DISTROFORMAT="pipe"
@@ -63,59 +69,136 @@ getos() {
 	if [ "${OS}" = "SunOS" ]; then
 		OS="Solaris"
 	elif [ "${OS}" = "DragonFly" ]; then
-		OS="DragonFlyBSD"
+		OS="DragonFlyBSD" # FIXME. Seems as this should be OS=FreeBSD, DISTRO=DragonFlyBSD
 	fi
 	export OS
 	return 0
 }
 
 getkernel() {
-	KERNEL=`uname -r`
+	if [ "${OS}" = "FreeBSD" -o "${OS}" = "DragonFlyBSD" ]; then
+		KERNEL=`uname -i`
+	elif [ "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
+		KERNEL=`uname -v`
+	elif [ "${OS}" = "AIX" ]; then
+	  # ie: 5300-04-02
+		KERNEL=`oslevel -s`
+	else
+		KERNEL=`uname -r`
+	fi
 	export KERNEL
 	return 0
 }
 
 getdistro() {
 	if [ "${OS}" = "Linux" ]; then
+		# https://github.com/wblankenship/getos/blob/master/os.json
+		# http://www.digitesters.com/how-to-find-my-linux-version/
 		if [ -f /etc/os-release ]; then
 			. /etc/os-release
-			DISTRO=${NAME}
-		elif [ -f /usr/bin/lsb_release ]; then
+			DISTRO=`echo ${NAME} | awk '{print $1}'`
+		elif [ -x /usr/bin/lsb_release ]; then
 			DISTRO=`/usr/bin/lsb_release -si 2>/dev/null`
 		elif [ -f /etc/redhat-release ]; then
 			DISTRO=`cat /etc/redhat-release | awk '{print $1}'`
-			if [ "${DISTRO}" = "Red" ]; then
-				DISTRO="RedHat"
-			fi
-		elif [ -f /etc/mandriva-release ]; then
-			DISTRO="Mandriva"
-		elif [ -f /etc/arch-release ]; then
-			DISTRO="ArchLinux"
-		elif [ -f /etc/gentoo-release ]; then
-			DISTRO="Gentoo"
-		elif [ -f /etc/SuSE-release ]; then
-			DISTRO="SuSE"
-		elif [ -f /etc/mandrake-release ]; then
-			DISTRO="Mandrake"
+		elif [ -f /etc/fedora-release ]; then
+			DISTRO="Fedora"
 		elif [ -f /etc/debian_version ]; then
-			# shit based on debian
 			if [ -f /etc/mailcleaner/etc/mailcleaner/version.def ]; then
 				DISTRO="MailCleaner"
 			else
 				DISTRO="Debian"
 			fi
+		elif [ -f /etc/arch-release ]; then
+			DISTRO="ArchLinux"
+		elif [ -f /etc/gentoo-release ]; then
+			DISTRO="Gentoo"
+		elif [ -f /etc/SuSE-release -o -f /etc/novell-release -o -f /etc/sles-release ]; then
+			DISTRO="SuSE"
+		  if [ -f /etc/os-release ]; then
+			  . /etc/os-release
+				if [ "${NAME}" = "openSUSE" ]; then
+					DISTRO="openSUSE"
+				fi
+			fi
+		elif [ -f /etc/mandriva-release ]; then
+			DISTRO="Mandriva"
+		elif [ -f /etc/mandrake-release -o -f /etc/mandakelinux-release ]; then
+			DISTRO="Mandrake"
 		elif [ -f /etc/UnitedLinux-release ]; then
 			DISTRO="UnitedLinux"
 		elif [ -f /etc/openwrt_version ]; then
 			DISTRO="OpenWRT"
-		elif [ -f /etc/slackware-version ]; then
+		elif [ -f /etc/slackware-version -o -f /etc/slackware-release ]; then
 			DISTRO="Slackware"
+		elif [ -f /etc/annvix-release ]; then
+			DISTRO="Annvix"
+		elif [ -f /etc/arklinux-release ]; then
+			DISTRO="Arklinux"
+		elif [ -f /etc/aurox-release ]; then
+			DISTRO="Aurox Linux"
+		elif [ -f /etc/blackcat-release ]; then
+			DISTRO="BlackCat"
+		elif [ -f /etc/cobalt-release ]; then
+			DISTRO="Cobalt"
+		elif [ -f /etc/conectiva-release ]; then
+			DISTRO="Conectiva"
+		elif [ -f /etc/eos-version ]; then
+			DISTRO="FreeEOS"
+		elif [ -f /etc/hlfs-release -o -f /etc/hlfs_version ]; then
+			DISTRO="HLFS"
+		elif [ -f /etc/immunix-release ]; then
+			DISTRO="Immunix"
+		elif [ -f /knoppix_version ]; then
+			DISTRO="Knoppix"
+		elif [ -f /etc/lfs-release -o -f /etc/lfs_version ]; then
+			DISTRO="Linux-From-Scratch"
+		elif [ -f /etc/linuxppc-release ]; then
+			DISTRO="Linux-PPC"
+		elif [ -f /etc/mageia-release ]; then
+			DISTRO="Mageia"
+		elif [ -f /etc/mklinux-release ]; then
+			DISTRO="MkLinux"
+		elif [ -f /etc/nld-release ]; then
+			DISTRO="Novell Linux Desktop"
+		elif [ -f /etc/pld-release ]; then
+			DISTRO="PLD"
+		elif [ -f /etc/rubix-version ]; then
+			DISTRO="Rubix"
+		elif [ -f /etc/e-smith-release ]; then
+			DISTRO="SME Server"
+		elif [ -f /etc/synoinfo.conf ]; then
+			DISTRO="Synology"
+		elif [ -f /etc/tinysofa-release ]; then
+			DISTRO="Tiny Sofa"
+		elif [ -f /etc/trustix-release -o -f /etc/trustix-version ]; then
+			DISTRO="Trustix"
+		elif [ -f /etc/turbolinux-release ]; then
+			DISTRO="TurboLinux"
+		elif [ -f /etc/ultrapenguin-release ]; then
+			DISTRO="UltraPenguin"
+		elif [ -f /etc/va-release ]; then
+			DISTRO="VA-Linux"
+		elif [ -f /etc/yellowdog-release ]; then
+			DISTRO="Yellow Dog"
 		else
-			DISTRO="Unknown"
+			DISTRO=
 		fi
+
+    # Fixing some Distro names
+		if [ "${DISTRO}" = "Debian GNU/Linux" ]; then
+			DISTRO="Debian"
+		elif [ "${DISTRO}" = "Red" -o "${DISTRO}" = "RedHatEnterpriseServer" ]; then
+			DISTRO="RedHat"
+		elif [ "${DISTRO}" = "Arch" ]; then
+			DISTRO="ArchLinux"
+		fi
+
 	elif [ "${OS}" = "FreeBSD" ]; then
 		if [ -f /etc/platform -a -f /etc/version ]; then
 			DISTRO="pfSense"
+		elif [ -f /etc/platform -a -f /etc/prd.name ]; then
+            DISTRO=`cat /etc/prd.name`
 		elif [ -f /usr/local/bin/pbreg ]; then
 			DISTRO="PC-BSD"
 		elif [ -f /tmp/freenas_config.md5 ]; then
@@ -132,6 +215,12 @@ getdistro() {
 		case `uname -m` in
 			AppleTV*)
 				DISTRO="AppleTV"
+<<<<<<< HEAD
+=======
+			;;
+			iPad*)
+				DISTRO="iPad"
+>>>>>>> 7b3790895dc37ee8b3dae2d58db95bbad7881162
 				;;
 			iPhone*)
 				DISTRO="iPhone"
@@ -154,7 +243,14 @@ getarch() {
 	if [ "${OS}" = "Solaris" ]; then
 		ARCH=`isainfo -k`
 	elif [ "${OS}" = "Darwin" ]; then
-		ARCH=`uname -p`
+	  ARCH=`uname -m`
+		if [ "${ARCH}" = "x86_64" ]; then
+			ARCH="amd64"
+		else
+			ARCH=`uname -p`
+		fi
+	elif [ "${OS}" = "AIX" ]; then
+	  ARCH=`uname -p`
 	else
 		ARCH=`uname -m`
 	fi
@@ -175,19 +271,25 @@ getversion() {
 			VERSION=`cat /etc/version`
 		elif [ "${DISTRO}" = "PC-BSD" ]; then
 			VERSION=`pbreg get /PC-BSD/Version`
+		elif [ -f /etc/prd.version ]; then
+      VERSION=`cat /etc/prd.version`
 		else
-			VERSION=`uname -i`
+			VERSION=`uname -r`
 		fi
 	elif [ "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
-		VERSION=`uname -v`
+		VERSION=`uname -r`
 	elif [ "${OS}" = "Linux" ]; then
+<<<<<<< HEAD
 		if [ "${DISTRO}" = "Debian GNU/Linux" ]; then
 			DISTRO="Debian"
 		fi
+=======
+>>>>>>> 7b3790895dc37ee8b3dae2d58db95bbad7881162
 		if [ "${DISTRO}" = "OpenWRT" ]; then
 			VERSION=`cat /etc/openwrt_version`
 		elif [ "${DISTRO}" = "Slackware" ]; then
 			VERSION=`cat /etc/slackware-version | cut -d" " -f2`
+<<<<<<< HEAD
 		# Debian are a bunch of useless cunts - also see: dash
 		elif [ -f /etc/os-release ]; then
 			if [ "${DISTRO}" = "Debian" ]; then
@@ -198,10 +300,17 @@ getversion() {
 				. /etc/os-release
 				VERSION=${VERSION_ID}
 			fi
+=======
+>>>>>>> 7b3790895dc37ee8b3dae2d58db95bbad7881162
 		elif [ -f /etc/redhat-release ]; then
 			VERSION=`cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//'`
-		elif [ -f /usr/bin/lsb_release ]; then
+		elif [ -x /usr/bin/lsb_release ]; then
 			VERSION=`lsb_release -sr 2>/dev/null`
+		#elif [ -f /etc/debian_version ]; then
+		#	VERSION=`cat /etc/debian_version`
+		elif [ -f /etc/os-release ]; then
+			. /etc/os-release
+			VERSION=${VERSION_ID}
 		else
 			VERSION=
 		fi
@@ -209,6 +318,9 @@ getversion() {
 		VERSION=`sw_vers -productVersion`
 	elif [ "${OS}" = "Solaris" ]; then
 		VERSION=`uname -v`
+	elif [ "${OS}" = "AIX" ]; then
+	  # ie: 6.1.0.0
+		VERSION=`oslevel`
 	fi
 	export VERSION
 	return 0
@@ -226,24 +338,28 @@ if [ -z ${DISTROEXEC} ]; then
 	fi
 	if [ "${DISTROFORMAT}" = "pipe" ]; then
 		echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}"
+  elif [ "${DISTROFORMAT}" = "twopipe" ]; then
+ 	 	echo "${OS}||${KERNEL}||${ARCH}||${DISTRO}||${VERSION}"
 	elif [ "${DISTROFORMAT}" = "ini" ]; then
 		echo "[distroscript]"
 		echo "  OS = ${OS}"
 		echo "  KERNEL = ${KERNEL}"
 		echo "  ARCH = ${ARCH}"
 		echo "  DISTRO = ${DISTRO}"
-		echo "  DISTROVER = ${VERSION}"
+		echo "  VERSION = ${VERSION}"
+		echo "  DISTROVER = ${VERSION}" # Compat with old scriptver 1.0.x
 		echo "  SCRIPTVER = ${DISTROSCRIPT}"
 	elif [ "${DISTROFORMAT}" = "export" ]; then
 		echo "OS=${OS}"
 		echo "KERNEL=${KERNEL}"
 		echo "ARCH=${ARCH}"
 		echo "DISTRO=${DISTRO}"
-		echo "DISTROVER=${VERSION}"
+		echo "VERSION=${VERSION}"
+		echo "DISTROVER=${VERSION}" # Compat with old scriptver 1.0.x
 		echo "SCRIPTVER=${DISTROSCRIPT}"
 	else
-		echo "Unsupported output format."
-		exit 1
+		# Use "pipe" format by default
+		echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}"
 	fi
 	exit 0
 fi
