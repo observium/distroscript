@@ -48,7 +48,7 @@
 #	README: [https://github.com/joeholden/distroscript/blob/master/README.md]
 
 # Script version
-DISTROSCRIPT="1.1.0"
+DISTROSCRIPT="1.1.1"
 
 if [ -z ${DISTROFORMAT} ]; then
 	DISTROFORMAT="pipe"
@@ -242,8 +242,8 @@ getarch() {
 			ARCH=`uname -p`
 		fi
 	elif [ "${OS}" = "AIX" ]; then
-	  ARCH=`uname -p`
-	else
+        ARCH=`uname -p`
+    else
 		ARCH=`uname -m`
 	fi
 	if [ "${OS}" = "Linux" ]; then
@@ -264,7 +264,7 @@ getversion() {
 		elif [ "${DISTRO}" = "PC-BSD" ]; then
 			VERSION=`pbreg get /PC-BSD/Version`
 		elif [ -f /etc/prd.version ]; then
-      VERSION=`cat /etc/prd.version`
+            VERSION=`cat /etc/prd.version`
 		else
 			VERSION=`uname -r`
 		fi
@@ -291,8 +291,6 @@ getversion() {
 			VERSION=`cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//'`
 		elif [ -x /usr/bin/lsb_release ]; then
 			VERSION=`lsb_release -sr 2>/dev/null`
-		#elif [ -f /etc/debian_version ]; then
-		#	VERSION=`cat /etc/debian_version`
 		elif [ -f /etc/os-release ]; then
 			. /etc/os-release
 			VERSION=${VERSION_ID}
@@ -304,7 +302,7 @@ getversion() {
 	elif [ "${OS}" = "Solaris" ]; then
 		VERSION=`uname -v`
 	elif [ "${OS}" = "AIX" ]; then
-	  # ie: 6.1.0.0
+        # ie: 6.1.0.0
 		VERSION=`oslevel`
 	fi
 	export VERSION
@@ -321,9 +319,7 @@ if [ -z ${DISTROEXEC} ]; then
 	if [ "${AGENT_LIBDIR}" -o "${MK_LIBDIR}" ]; then
 		echo "<<<distro>>>"
 	fi
-	if [ "${DISTROFORMAT}" = "pipe" ]; then
-		echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}"
-  elif [ "${DISTROFORMAT}" = "twopipe" ]; then
+    if [ "${DISTROFORMAT}" = "twopipe" ]; then
  	 	echo "${OS}||${KERNEL}||${ARCH}||${DISTRO}||${VERSION}"
 	elif [ "${DISTROFORMAT}" = "ini" ]; then
 		echo "[distroscript]"
