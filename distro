@@ -322,7 +322,7 @@ getvirt() {
     fi
     # Apparently being useful is very hard for anything other than Linux/systemd these days, such a sorry state of affairs
     if [ "${OS}" = "FreeBSD" ]; then
-        VIRT=`sysctl hw.hv_vendor`
+        VIRT=`sysctl -n hw.hv_vendor`
         if [ "${VIRT}" = "KVMKVMKVM" ]; then
             VIRT=kvm
         fi

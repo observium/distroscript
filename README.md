@@ -34,6 +34,7 @@ Variables:
  * **$DISTRO**       - Distribution name (eg Debian, OpenIndiana, pfSense), note for some OSes this empty (eg for FreeBSD, OpenBSD, AIX)
  * **$VERSION**      - Distribution (or OS if $DISTRO empty) version (eg 12.04, 6.3)
  * **$DISTROSCRIPT** - Version of the script
+ * **$VIRT**         - Virtualisation tech, if any (or the OS is useful enough to tell us)
 
 If information isn't available or applicable for any of the variables, they are left blank.
 
@@ -43,12 +44,15 @@ Functions:
  * **getarch**       - exports ARCH as the arch/platform
  * **getdistro**     - exports DISTRO as the distribution name
  * **getversion**    - exports VERSION as the distribution/os version
+ * **getvirt**       - exports VIRT as the virtualisation technology
 
 Notes:
  * On FreeBSD and OpenBSD, where it is a generic install, the distro field is left blank and the distrover is populated with the kernel name.
  * **x86_64** is normalised to **amd64** on Linux.
+ * For virtualisation, anything that looks like it might be **QEMU** or **KVM** is normalised to **kvm**.
+ * In a large majority of cases, detecting virtualisation just doesn't work either due to the OS being **stupid** (most cases) or people changing the presented dmi strings, or people using VirtualBox using another emulation type.
 
 Output:
- * Default output is pipe deliminated: `OS|KERNEL|ARCH|DISTRO|VERSION`
+ * Default output is pipe deliminated: `OS|KERNEL|ARCH|DISTRO|VERSION|VIRT`
  * Possible output options are: *pipe*, *twopipe*, *ini*, *export*
  * Set `$DISTROFORMAT` environment variable to change output. Example: `DISTROFORMAT=export ./distro`
