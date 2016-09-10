@@ -353,7 +353,7 @@ getvirt() {
             tmp=`dmidecode -s system-product-name 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
-        if [ "${VIRT}" == "none" ]; then
+        if [ "${VIRT}" = "none" ]; then
             if [ -f /usr/bin/systemd-detect-virt ]; then
                 VIRT=`/usr/bin/systemd-detect-virt`
             fi
@@ -362,29 +362,29 @@ getvirt() {
     elif [ "${OS}" = "FreeBSD" -o "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
         tmp=`sysctl -n hw.hv_vendor 2>/dev/null`
         VIRT=`detectvirt "${tmp}"`
-        if [ "${VIRT}" == "none" ]; then
+        if [ "${VIRT}" = "none" ]; then
             tmp=`sysctl -n hw.model 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
-        if [ "${VIRT}" == "none" ]; then
+        if [ "${VIRT}" = "none" ]; then
             tmp=`sysctl -n hw.product 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
-        if [ "${VIRT}" == "none" ]; then
+        if [ "${VIRT}" = "none" ]; then
             tmp=`sysctl -n hw.product 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
-        if [ "${VIRT}" == "none" ]; then
+        if [ "${VIRT}" = "none" ]; then
             tmp=`sysctl -n machdep.dmi.system-vendor 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
-        if [ "${VIRT}" == "none" ]; then
+        if [ "${VIRT}" = "none" ]; then
             tmp=`sysctl -n machdep.dmi.system-product 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
         tmp=`sysctl -n security.jail.jailed 2>/dev/null`
-        if [ "${tmp}" == "1" ]; then
-            if [ "${VIRT}" == "none" ]; then
+        if [ "${tmp}" = "1" ]; then
+            if [ "${VIRT}" = "none" ]; then
                 VIRT=jail
             else
                 VIRT=${VIRT}:jail
