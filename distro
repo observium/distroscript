@@ -319,13 +319,19 @@ getvirt() {
         if [ -f `which systemd-detect-virt` ]; then
             VIRT=`systemd-detect-virt`
         fi
-    fi
     # Apparently being useful is very hard for anything other than Linux/systemd these days, such a sorry state of affairs
-    if [ "${OS}" = "FreeBSD" ]; then
+    elif [ "${OS}" = "FreeBSD" ]; then
         VIRT=`sysctl -n hw.hv_vendor`
         if [ "${VIRT}" = "KVMKVMKVM" ]; then
             VIRT=kvm
         fi
+    elif [ "${OS}" = "OpenBSD" ]; then
+        VIRT=`grep pvbus /var/run/dmesg.boot | head -n1 | awk '{print $4}'`
+    else
+        VIRT=
+    fi
+    if [ ! -z ${VIRT} ]; then
+        VIRT=`echo ${VIRT} | tr '[:upper:]' '[:lower:]'`
     fi
     export VIRT
     return 0
