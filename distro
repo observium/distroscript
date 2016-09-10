@@ -265,6 +265,8 @@ getversion() {
             VERSION=`pbreg get /PC-BSD/Version`
         elif [ -f /etc/prd.version ]; then
             VERSION=`cat /etc/prd.version`
+        elif [ -f /bin/freebsd-version ]; then
+            VERSION=`/bin/freebsd-version -u`
         else
             VERSION=`uname -r`
         fi
