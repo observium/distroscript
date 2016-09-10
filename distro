@@ -235,23 +235,16 @@ getarch() {
     if [ "${OS}" = "Solaris" ]; then
         ARCH=`isainfo -k`
     elif [ "${OS}" = "Darwin" ]; then
-      ARCH=`uname -m`
-        if [ "${ARCH}" = "x86_64" ]; then
-            ARCH="amd64"
-        else
-            ARCH=`uname -p`
-        fi
+        ARCH=`uname -m`
     elif [ "${OS}" = "AIX" ]; then
         ARCH=`uname -p`
     else
         ARCH=`uname -m`
     fi
-    if [ "${OS}" = "Linux" ]; then
-        if [ "${ARCH}" = "x86_64" ]; then
-            ARCH="amd64"
-        elif [ "${ARCH}" = "i486" -o "${ARCH}" = "i586" -o "${ARCH}" = "i686" ]; then
-            ARCH="i386"
-        fi
+    if [ "${ARCH}" = "x86_64" ]; then
+        ARCH="amd64"
+    elif [ "${ARCH}" = "i486" -o "${ARCH}" = "i586" -o "${ARCH}" = "i686" ]; then
+        ARCH="i386"
     fi
     export ARCH
     return 0
