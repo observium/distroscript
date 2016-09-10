@@ -316,9 +316,10 @@ getvirt() {
     # Linux
     if [ "${OS}" = "Linux" ]; then
         # First, systemd-detect-virt, because easy
-        if [ -f `which systemd-detect-virt` ]; then
-            VIRT=`systemd-detect-virt`
+        if [ -f /usr/bin/systemd-detect-virt ]; then
+            VIRT=/usr/bin/systemd-detect-virt
         fi
+    fi
     # Apparently being useful is very hard for anything other than Linux/systemd these days, such a sorry state of affairs
     elif [ "${OS}" = "FreeBSD" ]; then
         VIRT=`sysctl -n hw.hv_vendor`
