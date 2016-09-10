@@ -300,7 +300,7 @@ getversion() {
     elif [ "${OS}" = "Darwin" ]; then
         VERSION=`sw_vers -productVersion`
     elif [ "${OS}" = "Solaris" ]; then
-        VERSION=`uname -v`
+a        VERSION=`uname -v`
     elif [ "${OS}" = "AIX" ]; then
         # ie: 6.1.0.0
         VERSION=`oslevel`
@@ -309,18 +309,39 @@ getversion() {
     return 0
 }
 
+getvirt() {
+    # We check stuff from most->least desirable, depending on what tools are available
+    # Linux
+    if [ "${OS}" = "Linux" ]; then
+        # First, systemd-detect-virt, because easy
+        if [ -f `which systemd-detect-virt` ]; then
+            VIRT=`systemd-detect-virt`
+        fi
+    fi
+    # Apparently being useful is very hard for anything other than Linux/systemd these days, such a sorry state of affairs
+    if [ "${OS}" = "FreeBSD" ]; then
+        VIRT=`sysctl hw.hv_vendor`
+        if [ "${VIRT}" = "KVMKVMKVM" ]; then
+            VIRT=kvm
+        fi
+    fi
+    export VIRT
+    return 0
+}
+
 getos
 getkernel
 getarch
 getdistro
 getversion
+getvirt
 
 if [ -z ${DISTROEXEC+x} ]; then
     if [ "${AGENT_LIBDIR}" -o "${MK_LIBDIR}" ]; then
         echo "<<<distro>>>"
     fi
     if [ "${DISTROFORMAT}" = "twopipe" ]; then
-        echo "${OS}||${KERNEL}||${ARCH}||${DISTRO}||${VERSION}"
+        echo "${OS}||${KERNEL}||${ARCH}||${DISTRO}||${VERSION}||${VIRT}"
     elif [ "${DISTROFORMAT}" = "ini" ]; then
         echo "[distroscript]"
         echo "  OS = ${OS}"
@@ -329,6 +350,7 @@ if [ -z ${DISTROEXEC+x} ]; then
         echo "  DISTRO = ${DISTRO}"
         echo "  VERSION = ${VERSION}"
         echo "  DISTROVER = ${VERSION}" # Compat with old scriptver 1.0.x
+        echo "  VIRT = ${VIRT}"
         echo "  SCRIPTVER = ${DISTROSCRIPT}"
     elif [ "${DISTROFORMAT}" = "export" ]; then
         echo "OS=${OS}"
@@ -337,10 +359,11 @@ if [ -z ${DISTROEXEC+x} ]; then
         echo "DISTRO=${DISTRO}"
         echo "VERSION=${VERSION}"
         echo "DISTROVER=${VERSION}" # Compat with old scriptver 1.0.x
+        echo "VIRT=${VIRT}"
         echo "SCRIPTVER=${DISTROSCRIPT}"
     else
         # Use "pipe" format by default
-        echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}"
+        echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}|${VIRT}"
     fi
     exit 0
 fi
