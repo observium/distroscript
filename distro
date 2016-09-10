@@ -48,7 +48,7 @@
 #   README: [https://github.com/joeholden/distroscript/blob/master/README.md]
 
 # Script version
-DISTROSCRIPT="1.1.5"
+DISTROSCRIPT="1.1.6"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -324,14 +324,34 @@ getvirt() {
     # Apparently being useful is very hard for anything other than Linux/systemd these days, such a sorry state of affairs
     elif [ "${OS}" = "FreeBSD" ]; then
         VIRT=`sysctl -n hw.hv_vendor`
+        if [ -z $VIRT ]; then
+            VIRT=`sysctl -n hw.model`
+        fi
     elif [ "${OS}" = "OpenBSD" ]; then
-        VIRT=`grep pvbus /var/run/dmesg.boot | head -n1 | awk '{print $4}'`
+        # FIXME: Until hostctl works, sack this off and use hw.vendor
+        # VIRT=`grep pvbus /var/run/dmesg.boot | head -n1 | awk '{print $4}'`
+        VIRT=`sysctl -n hw.vendor`
     else
         VIRT=
     fi
     case $VIRT in
         [Kk][Vv][Mm]*)
             VIRT=kvm
+            ;;
+        [Vv][Mm][Ww][Aa][Rr][Ee]*)
+            VIRT=vmware
+            ;;
+        [Xx][Ee][Nn]*)
+            VIRT=xen
+            ;;
+        [Mm][Ii][Cc][Rr][Oo][Ss][Oo][Ff][Tt]*)
+            VIRT=microsoft
+            ;;
+        [Qq][Ee][Mm][Uu]*)
+            VIRT=kvm
+            ;;
+        [Vv][Ii][Rr][Tt][Uu][Aa][Ll])
+            VIRT=microsoft
             ;;
         *)
             VIRT=${VIRT}
