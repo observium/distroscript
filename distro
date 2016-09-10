@@ -334,7 +334,7 @@ getvirt() {
             VIRT=kvm
             ;;
         *)
-            VIRT=
+            VIRT=${VIRT}
             ;;
     esac
     export VIRT
