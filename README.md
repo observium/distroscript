@@ -14,11 +14,6 @@ Obviously to implement good support for all platforms I require at least uname o
 * VxWorks
 * RTOS/QNX
 
-Versioning
-========
-
-Generally after every commit, or at least after a couple of moderate commits, I increment the version.
-
 Usage
 =====
 
