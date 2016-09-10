@@ -48,7 +48,7 @@ Functions:
 
 Notes:
  * On FreeBSD and OpenBSD, where it is a generic install, the distro field is left blank and the distrover is populated with the kernel name.
- * **x86_64** is normalised to **amd64** on Linux.
+ * **x86_64** is normalised to **amd64**, **ix86** is normalised to **i386**.
  * Values for **VIRT** use the naming convention from **[systemd-detect-virt](https://www.freedesktop.org/software/systemd/man/systemd-detect-virt.html "systemd-detect-virt")** with the exception of FreeBSD jails.
  * In a large majority of cases, detecting virtualisation just doesn't work either due to the OS being **stupid** (most cases) or people changing the presented dmi strings, or people using VirtualBox using another emulation type.
 
