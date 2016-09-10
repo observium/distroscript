@@ -393,7 +393,7 @@ getvirt() {
         fi
         tmp=`sysctl -n security.jail.jailed 2>/dev/null`
         if [ "${tmp}" == "1" ]; then
-            if [ "${VIRT}" != "none" ]; then
+            if [ "${VIRT}" == "none" ]; then
                 VIRT=jail
             else
                 VIRT=${VIRT}:jail
