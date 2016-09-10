@@ -391,6 +391,14 @@ getvirt() {
             tmp=`sysctl -n machdep.dmi.system-product 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
+        tmp=`sysctl -n security.jail.jailed 2>/dev/null`
+        if [ "${tmp}" == "1" ]; then
+            if [ "${VIRT}" != "none" ]; then
+                VIRT=jail
+            else
+                VIRT=${VIRT}:jail
+            fi
+        fi
     else
         VIRT=""
     fi
