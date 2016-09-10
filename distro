@@ -312,7 +312,7 @@ detectvirt() {
     local type
     type=none
     case $1 in
-        [Kk][Vv][Mm]*)
+        [Kk][Vv][Mm]|[Qq][Ee][Mm][Uu]*)
             type=kvm
             ;;
         [Vv][Mm][Ww][Aa][Rr][Ee]*)
@@ -324,22 +324,13 @@ detectvirt() {
         [Xx][Ee][Nn]*)
             type=xen:pv
             ;;
-        [Mm][Ii][Cc][Rr][Oo][Ss][Oo][Ff][Tt]*)
-            type=microsoft
-            ;;
-        [Qq][Ee][Mm][Uu]*)
-            type=kvm
-            ;;
-        [Vv][Ii][Rr][Tt][Uu][Aa][Ll])
+        [Mm][Ii][Cc][Rr][Oo][Ss][Oo][Ff][Tt]|[Vv][Ii][Rr][Tt][Uu][Aa][Ll]*)
             type=microsoft
             ;;
         [Bb][Hh][Yy][Vv][Ee]*)
             type=bhyve
             ;;
-        [Vv][Uu][Ll][Tt][Rr]*)
-            type=kvm:your-provider-is-a-moron
-            ;;
-        [Dd][Rr][Oo][Pp][Ll][Ee][Tt]*)
+        [Vv][Uu][Ll][Tt][Rr]|[Dd][Rr][Oo][Pp][Ll][Ee][Tt]*)
             type=kvm:your-provider-is-a-moron
             ;;
         Standard*PC*Q*ICH*)
