@@ -221,7 +221,7 @@ getdistro() {
                 DISTRO="iPod"
                 ;;
             *)
-                DISTRO="OSX"
+                DISTRO="macOS"
                 ;;
         esac
     else
