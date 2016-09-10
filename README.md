@@ -1,9 +1,7 @@
 distroscript
 ============
 
-Simple shell script to return os/distro/version info
-
-Pull requests welcome!
+~~Simple~~ shell script to return os/distro/version/virt info
 
 Wanted
 ======
