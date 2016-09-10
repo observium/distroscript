@@ -48,7 +48,7 @@
 #   README: [https://github.com/joeholden/distroscript/blob/master/README.md]
 
 # Script version
-DISTROSCRIPT="1.1.6"
+DISTROSCRIPT="1.1.7"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -325,8 +325,11 @@ detectvirt() {
         [Vv][Mm][Ww][Aa][Rr][Ee]*)
             type=vmware
             ;;
+        HVM*domU*)
+            type=xen:hvm
+        ;;
         [Xx][Ee][Nn]*)
-            type=xen
+            type=xen:pv
             ;;
         [Mm][Ii][Cc][Rr][Oo][Ss][Oo][Ff][Tt]*)
             type=microsoft
@@ -336,6 +339,15 @@ detectvirt() {
             ;;
         [Vv][Ii][Rr][Tt][Uu][Aa][Ll])
             type=microsoft
+            ;;
+        [Bb][Hh][Yy][Vv][Ee]*)
+            type=bhyve
+            ;;
+        [Vv][Uu][Ll][Tt][Rr]*)
+            type=kvm:your-provider-is-a-moron
+            ;;
+        [Dd][Rr][Oo][Pp][Ll][Ee][Tt]*)
+            type=kvm:your-provider-is-a-moron
             ;;
         Standard*PC*Q*ICH*)
             type=kvm
@@ -353,35 +365,41 @@ getvirt() {
     # Linux
     if [ "${OS}" = "Linux" ]; then
         # First, systemd-detect-virt, because easy
-        if [ -f /usr/bin/systemd-detect-virt ]; then
-            VIRT=`/usr/bin/systemd-detect-virt`
+        if [ -f `which dmidecode` ]; then
+            tmp=`dmidecode -s system-product-name 2>/dev/null`
+            VIRT=`detectvirt "${tmp}"`
+        fi
+        if [ "${VIRT}" == "none" ]; then
+            if [ -f /usr/bin/systemd-detect-virt ]; then
+                VIRT=`/usr/bin/systemd-detect-virt`
+            fi
         fi
     # Apparently being useful is very hard for anything other than Linux/systemd these days, such a sorry state of affairs
     elif [ "${OS}" = "FreeBSD" -o "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
-        tmp=`sysctl -n hw.hv_vendor`
+        tmp=`sysctl -n hw.hv_vendor 2>/dev/null`
         VIRT=`detectvirt "${tmp}"`
         if [ "${VIRT}" == "none" ]; then
-            tmp=`sysctl -n hw.model`
+            tmp=`sysctl -n hw.model 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
         if [ "${VIRT}" == "none" ]; then
-            tmp=`sysctl -n hw.product`
+            tmp=`sysctl -n hw.product 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
         if [ "${VIRT}" == "none" ]; then
-            tmp=`sysctl -n hw.product`
+            tmp=`sysctl -n hw.product 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
         if [ "${VIRT}" == "none" ]; then
-            tmp=`sysctl -n machdep.dmi.system-vendor`
+            tmp=`sysctl -n machdep.dmi.system-vendor 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
         if [ "${VIRT}" == "none" ]; then
-            tmp=`sysctl -n machdep.dmi.system-product`
+            tmp=`sysctl -n machdep.dmi.system-product 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
     else
-        VIRT="FUCK_KNOWS"
+        VIRT=""
     fi
     export VIRT
     return 0
