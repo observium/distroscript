@@ -302,7 +302,7 @@ getversion() {
     elif [ "${OS}" = "Darwin" ]; then
         VERSION=`sw_vers -productVersion`
     elif [ "${OS}" = "Solaris" ]; then
-a        VERSION=`uname -v`
+        VERSION=`uname -v`
     elif [ "${OS}" = "AIX" ]; then
         # ie: 6.1.0.0
         VERSION=`oslevel`
