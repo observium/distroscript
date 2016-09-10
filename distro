@@ -369,6 +369,8 @@ if [ -z ${DISTROEXEC+x} ]; then
         echo "DISTROVER=${VERSION}" # Compat with old scriptver 1.0.x
         echo "VIRT=${VIRT}"
         echo "SCRIPTVER=${DISTROSCRIPT}"
+    elif [ "${DISTROFORMAT}" = "json" ]; then
+        echo "{\"os\":\"${OS}\",\"kernel\":\"${KERNEL}\",\"arch\":\"${ARCH}\",\"distro\":\"${DISTRO}\",\"version\":\"${VERSION}\",\"virt\":\"${VIRT}\"}"
     else
         # Use "pipe" format by default
         echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}|${VIRT}"

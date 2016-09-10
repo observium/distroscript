@@ -54,5 +54,5 @@ Notes:
 
 Output:
  * Default output is pipe deliminated: `OS|KERNEL|ARCH|DISTRO|VERSION|VIRT`
- * Possible output options are: *pipe*, *twopipe*, *ini*, *export*
+ * Possible output options are: *pipe*, *twopipe*, *ini*, *export*, *json*
  * Set `$DISTROFORMAT` environment variable to change output. Example: `DISTROFORMAT=export ./distro`
