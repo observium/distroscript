@@ -306,6 +306,8 @@ getversion() {
     elif [ "${OS}" = "AIX" ]; then
         # ie: 6.1.0.0
         VERSION=`oslevel`
+    else
+        VERSION=
     fi
     export VERSION
     return 0
@@ -317,14 +319,15 @@ getvirt() {
     if [ "${OS}" = "Linux" ]; then
         # First, systemd-detect-virt, because easy
         if [ -f /usr/bin/systemd-detect-virt ]; then
-            VIRT=/usr/bin/systemd-detect-virt
+            VIRT=`/usr/bin/systemd-detect-virt`
         fi
-    fi
     # Apparently being useful is very hard for anything other than Linux/systemd these days, such a sorry state of affairs
     elif [ "${OS}" = "FreeBSD" ]; then
         VIRT=`sysctl -n hw.hv_vendor`
     elif [ "${OS}" = "OpenBSD" ]; then
         VIRT=`grep pvbus /var/run/dmesg.boot | head -n1 | awk '{print $4}'`
+    else
+        VIRT=
     fi
     case $VIRT in
         [Kk][Vv][Mm]*)
