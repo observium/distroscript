@@ -439,7 +439,7 @@ if [ -z ${DISTROEXEC+x} ]; then
         echo "VIRT=${VIRT}"
         echo "SCRIPTVER=${DISTROSCRIPT}"
     elif [ "${DISTROFORMAT}" = "json" ]; then
-        echo "{\"os\":\"${OS}\",\"kernel\":\"${KERNEL}\",\"arch\":\"${ARCH}\",\"distro\":\"${DISTRO}\",\"version\":\"${VERSION}\",\"virt\":\"${VIRT}\"}"
+        echo "{\"os\":\"${OS}\",\"kernel\":\"${KERNEL}\",\"arch\":\"${ARCH}\",\"distro\":\"${DISTRO}\",\"version\":\"${VERSION}\",\"virt\":\"${VIRT}\",\"scriptver\":\"${DISTROSCRIPT}\"}"
     else
         # Use "pipe" format by default
         echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}|${VIRT}"
