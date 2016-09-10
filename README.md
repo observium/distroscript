@@ -33,8 +33,8 @@ Variables:
  * **$ARCH**         - platform/bitness (eg amd64 or i386)
  * **$DISTRO**       - Distribution name (eg Debian, OpenIndiana, pfSense), note for some OSes this empty (eg for FreeBSD, OpenBSD, AIX)
  * **$VERSION**      - Distribution (or OS if $DISTRO empty) version (eg 12.04, 6.3)
- * **$DISTROSCRIPT** - Version of the script
  * **$VIRT**         - Virtualisation tech, if any (or the OS is useful enough to tell us)
+ * **$DISTROSCRIPT** - Version of the script
 
 If information isn't available or applicable for any of the variables, they are left blank.
 
