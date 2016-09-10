@@ -309,13 +309,13 @@ getversion() {
 	return 0
 }
 
+getos
+getkernel
+getarch
+getdistro
+getversion
 
-if [ -z ${DISTROEXEC} ]; then
-	getos
-	getkernel
-	getarch
-	getdistro
-	getversion
+if [ -z ${DISTROEXEC+x} ]; then
 	if [ "${AGENT_LIBDIR}" -o "${MK_LIBDIR}" ]; then
 		echo "<<<distro>>>"
 	fi
