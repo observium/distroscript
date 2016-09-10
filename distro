@@ -48,7 +48,7 @@
 #   README: [https://github.com/joeholden/distroscript/blob/master/README.md]
 
 # Script version
-DISTROSCRIPT="1.1.4"
+DISTROSCRIPT="1.1.5"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -322,17 +322,17 @@ getvirt() {
     # Apparently being useful is very hard for anything other than Linux/systemd these days, such a sorry state of affairs
     elif [ "${OS}" = "FreeBSD" ]; then
         VIRT=`sysctl -n hw.hv_vendor`
-        if [ "${VIRT}" = "KVMKVMKVM" ]; then
-            VIRT=kvm
-        fi
     elif [ "${OS}" = "OpenBSD" ]; then
         VIRT=`grep pvbus /var/run/dmesg.boot | head -n1 | awk '{print $4}'`
-    else
-        VIRT=
     fi
-    if [ ! -z ${VIRT} ]; then
-        VIRT=`echo ${VIRT} | tr '[:upper:]' '[:lower:]'`
-    fi
+    case $VIRT in
+        [Kk][Vv][Mm]*)
+            VIRT=kvm
+            ;;
+        *)
+            VIRT=
+            ;;
+    esac
     export VIRT
     return 0
 }
