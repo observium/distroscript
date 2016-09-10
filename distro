@@ -48,7 +48,7 @@
 #   README: [https://github.com/joeholden/distroscript/blob/master/README.md]
 
 # Script version
-DISTROSCRIPT="1.1.2"
+DISTROSCRIPT="1.1.4"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
