@@ -313,6 +313,41 @@ getversion() {
     return 0
 }
 
+# Since the state of identifying virt type is ridiculous, let's have a function that tries to work it out given a string
+detectvirt() {
+    local virt
+    local type
+    type=none
+    case $1 in
+        [Kk][Vv][Mm]*)
+            type=kvm
+            ;;
+        [Vv][Mm][Ww][Aa][Rr][Ee]*)
+            type=vmware
+            ;;
+        [Xx][Ee][Nn]*)
+            type=xen
+            ;;
+        [Mm][Ii][Cc][Rr][Oo][Ss][Oo][Ff][Tt]*)
+            type=microsoft
+            ;;
+        [Qq][Ee][Mm][Uu]*)
+            type=kvm
+            ;;
+        [Vv][Ii][Rr][Tt][Uu][Aa][Ll])
+            type=microsoft
+            ;;
+        Standard*PC*Q*ICH*)
+            type=kvm
+            ;;
+        *)
+            type=none
+            ;;
+    esac
+
+    echo $type
+}
+
 getvirt() {
     # We check stuff from most->least desirable, depending on what tools are available
     # Linux
@@ -322,41 +357,32 @@ getvirt() {
             VIRT=`/usr/bin/systemd-detect-virt`
         fi
     # Apparently being useful is very hard for anything other than Linux/systemd these days, such a sorry state of affairs
-    elif [ "${OS}" = "FreeBSD" ]; then
-        VIRT=`sysctl -n hw.hv_vendor`
-        if [ -z $VIRT ]; then
-            VIRT=`sysctl -n hw.model`
+    elif [ "${OS}" = "FreeBSD" -o "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
+        tmp=`sysctl -n hw.hv_vendor`
+        VIRT=`detectvirt "${tmp}"`
+        if [ "${VIRT}" == "none" ]; then
+            tmp=`sysctl -n hw.model`
+            VIRT=`detectvirt "${tmp}"`
         fi
-    elif [ "${OS}" = "OpenBSD" ]; then
-        # FIXME: Until hostctl works, sack this off and use hw.vendor
-        # VIRT=`grep pvbus /var/run/dmesg.boot | head -n1 | awk '{print $4}'`
-        VIRT=`sysctl -n hw.vendor`
+        if [ "${VIRT}" == "none" ]; then
+            tmp=`sysctl -n hw.product`
+            VIRT=`detectvirt "${tmp}"`
+        fi
+        if [ "${VIRT}" == "none" ]; then
+            tmp=`sysctl -n hw.product`
+            VIRT=`detectvirt "${tmp}"`
+        fi
+        if [ "${VIRT}" == "none" ]; then
+            tmp=`sysctl -n machdep.dmi.system-vendor`
+            VIRT=`detectvirt "${tmp}"`
+        fi
+        if [ "${VIRT}" == "none" ]; then
+            tmp=`sysctl -n machdep.dmi.system-product`
+            VIRT=`detectvirt "${tmp}"`
+        fi
     else
-        VIRT=
+        VIRT="FUCK_KNOWS"
     fi
-    case $VIRT in
-        [Kk][Vv][Mm]*)
-            VIRT=kvm
-            ;;
-        [Vv][Mm][Ww][Aa][Rr][Ee]*)
-            VIRT=vmware
-            ;;
-        [Xx][Ee][Nn]*)
-            VIRT=xen
-            ;;
-        [Mm][Ii][Cc][Rr][Oo][Ss][Oo][Ff][Tt]*)
-            VIRT=microsoft
-            ;;
-        [Qq][Ee][Mm][Uu]*)
-            VIRT=kvm
-            ;;
-        [Vv][Ii][Rr][Tt][Uu][Aa][Ll])
-            VIRT=microsoft
-            ;;
-        *)
-            VIRT=${VIRT}
-            ;;
-    esac
     export VIRT
     return 0
 }
