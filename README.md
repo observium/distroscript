@@ -10,7 +10,18 @@ Obviously to implement good support for all platforms I require at least uname o
 
 * HP-UX
 * VxWorks
-* RTOS/QNX
+* Hurd
+* Minix
+
+Known supported
+===============
+
+* **Linux**
+* **Free/Open/Net/Dragonfly BSD**
+* **Cygwin/MingW**
+* **QNX**
+* **AIX**
+* **Solaris/SunOS**
 
 Usage
 =====
