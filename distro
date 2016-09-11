@@ -47,15 +47,13 @@
 #   URL: [https://github.com/joeholden/distroscript]
 #   README: [https://github.com/joeholden/distroscript/blob/master/README.md]
 
-# Script version
-DISTROSCRIPT="1.1.8"
+DISTROSCRIPT="1.2"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
 fi
 
 if [ -n "${AGENT_LIBDIR}" -o -n "${MK_LIBDIR}" ]; then
-    # Set output for check_mk/observium agent
     DISTROFORMAT="export"
 fi
 
@@ -64,7 +62,7 @@ getos() {
     if [ "${OS}" = "SunOS" ]; then
         OS="Solaris"
     elif [ "${OS}" = "DragonFly" ]; then
-        OS="DragonFlyBSD" # FIXME. Seems as this should be OS=FreeBSD, DISTRO=DragonFlyBSD
+        OS="DragonFlyBSD"
     fi
     export OS
     return 0
@@ -76,7 +74,6 @@ getkernel() {
     elif [ "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
         KERNEL=`uname -v`
     elif [ "${OS}" = "AIX" ]; then
-      # ie: 5300-04-02
         KERNEL=`oslevel -s`
     else
         KERNEL=`uname -r`
@@ -87,8 +84,6 @@ getkernel() {
 
 getdistro() {
     if [ "${OS}" = "Linux" ]; then
-        # https://github.com/wblankenship/getos/blob/master/os.json
-        # http://www.digitesters.com/how-to-find-my-linux-version/
         if [ -f /etc/os-release ]; then
             . /etc/os-release
             DISTRO=`echo ${NAME} | awk '{print $1}'`
@@ -180,7 +175,6 @@ getdistro() {
             DISTRO=
         fi
 
-    # Fixing some Distro names
         if [ "${DISTRO}" = "Debian GNU/Linux" ]; then
             DISTRO="Debian"
         elif [ "${DISTRO}" = "Red" -o "${DISTRO}" = "RedHatEnterpriseServer" ]; then
@@ -306,7 +300,6 @@ getversion() {
     return 0
 }
 
-# Since the state of identifying virt type is ridiculous, let's have a function that tries to work it out given a string
 detectvirt() {
     local virt
     local type
@@ -345,10 +338,7 @@ detectvirt() {
 }
 
 getvirt() {
-    # We check stuff from most->least desirable, depending on what tools are available
-    # Linux
     if [ "${OS}" = "Linux" ]; then
-        # First, systemd-detect-virt, because easy
         if [ -f `which dmidecode` ]; then
             tmp=`dmidecode -s system-product-name 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
@@ -358,7 +348,6 @@ getvirt() {
                 VIRT=`/usr/bin/systemd-detect-virt`
             fi
         fi
-    # Apparently being useful is very hard for anything other than Linux/systemd these days, such a sorry state of affairs
     elif [ "${OS}" = "FreeBSD" -o "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
         tmp=`sysctl -n hw.hv_vendor 2>/dev/null`
         VIRT=`detectvirt "${tmp}"`
@@ -417,7 +406,6 @@ if [ -z ${DISTROEXEC+x} ]; then
         echo "  ARCH = ${ARCH}"
         echo "  DISTRO = ${DISTRO}"
         echo "  VERSION = ${VERSION}"
-        echo "  DISTROVER = ${VERSION}" # Compat with old scriptver 1.0.x
         echo "  VIRT = ${VIRT}"
         echo "  SCRIPTVER = ${DISTROSCRIPT}"
     elif [ "${DISTROFORMAT}" = "export" ]; then
@@ -426,13 +414,11 @@ if [ -z ${DISTROEXEC+x} ]; then
         echo "ARCH=${ARCH}"
         echo "DISTRO=${DISTRO}"
         echo "VERSION=${VERSION}"
-        echo "DISTROVER=${VERSION}" # Compat with old scriptver 1.0.x
         echo "VIRT=${VIRT}"
         echo "SCRIPTVER=${DISTROSCRIPT}"
     elif [ "${DISTROFORMAT}" = "json" ]; then
         echo "{\"os\":\"${OS}\",\"kernel\":\"${KERNEL}\",\"arch\":\"${ARCH}\",\"distro\":\"${DISTRO}\",\"version\":\"${VERSION}\",\"virt\":\"${VIRT}\",\"scriptver\":\"${DISTROSCRIPT}\"}"
     else
-        # Use "pipe" format by default
         echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}|${VIRT}"
     fi
     exit 0
