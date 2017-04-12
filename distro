@@ -2,7 +2,7 @@
 #
 #   Observium License Version 1.0
 #
-#   Copyright (c) 2013-2015 Joe Holden, (c) 2015 Mike Stupalov
+#   Copyright (c) 2013-2017 Joe Holden, (c) 2015 Mike Stupalov
 #
 #   The intent of this license is to establish the freedom to use, share and contribute to
 #   the software regulated by this license.
@@ -339,13 +339,14 @@ detectvirt() {
 
 getvirt() {
     if [ "${OS}" = "Linux" ]; then
-        if [ -f `which dmidecode` ]; then
+        if [ -f `which dmidecode 2>/dev/null` ]; then
             tmp=`dmidecode -s system-product-name 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
         if [ "${VIRT}" = "none" ]; then
             if [ -f /usr/bin/systemd-detect-virt ]; then
-                VIRT=`/usr/bin/systemd-detect-virt`
+                tmp=`/usr/bin/systemd-detect-virt`
+                VIRT=`detectvirt "${tmp}"`
             fi
         fi
     elif [ "${OS}" = "FreeBSD" -o "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
@@ -371,12 +372,14 @@ getvirt() {
             tmp=`sysctl -n machdep.dmi.system-product 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
-        tmp=`sysctl -n security.jail.jailed 2>/dev/null`
-        if [ "${tmp}" = "1" ]; then
-            if [ "${VIRT}" = "none" ]; then
-                VIRT=jail
-            else
-                VIRT=${VIRT}:jail
+        if [ "${OS}" = "FreeBSD" ]; then
+            tmp=`sysctl -n security.jail.jailed 2>/dev/null`
+            if [ "${tmp}" = "1" ]; then
+                if [ "${VIRT}" = "none" ]; then
+                    VIRT=jail
+                else
+                    VIRT=${VIRT}:jail
+                fi
             fi
         fi
     else
