@@ -367,10 +367,6 @@ getvirt() {
             VIRT=`detectvirt "${tmp}"`
         fi
         if [ "${VIRT}" = "none" ]; then
-            tmp=`sysctl -n hw.product 2>/dev/null`
-            VIRT=`detectvirt "${tmp}"`
-        fi
-        if [ "${VIRT}" = "none" ]; then
             tmp=`sysctl -n machdep.dmi.system-vendor 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
