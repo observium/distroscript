@@ -47,7 +47,7 @@
 #   URL: [https://gitlab.com/joewholden/distroscript]
 #   README: [https://gitlab.com/joewholden/distroscript/blob/master/README.md]
 
-DISTROSCRIPT="1.2"
+DISTROSCRIPT="1.2.1"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -324,7 +324,7 @@ detectvirt() {
             type=bhyve
             ;;
         [Vv][Uu][Ll][Tt][Rr]|[Dd][Rr][Oo][Pp][Ll][Ee][Tt]*)
-            type=kvm:your-provider-is-a-moron
+            type=kvm
             ;;
         Standard*PC*Q*ICH*)
             type=kvm
@@ -346,6 +346,12 @@ getvirt() {
         if [ "${VIRT}" = "none" ]; then
             if [ -f /usr/bin/systemd-detect-virt ]; then
                 tmp=`/usr/bin/systemd-detect-virt`
+                VIRT=`detectvirt "${tmp}"`
+            fi
+        fi
+        if [ "${VIRT}" = "none" ]; then
+            if [ -f /proc/cpuinfo ]; then
+                tmp=`grep 'model name' /proc/cpuinfo | cut -d\  -f3-`
                 VIRT=`detectvirt "${tmp}"`
             fi
         fi
