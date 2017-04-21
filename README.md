@@ -22,6 +22,7 @@ Known supported
 * **QNX**
 * **AIX**
 * **Solaris/SunOS**
+* **macOS/IOS**
 
 Usage
 =====
@@ -38,6 +39,7 @@ Variables:
  * **$DISTRO**       - Distribution name (eg Debian, OpenIndiana, pfSense), note for some OSes this empty (eg for FreeBSD, OpenBSD, AIX)
  * **$VERSION**      - Distribution (or OS if $DISTRO empty) version (eg 12.04, 6.3)
  * **$VIRT**         - Virtualisation tech, if any (or the OS is useful enough to tell us)
+ * **$CONT**         - Container tech, if any (or the OS is useful enough to tell us)
  * **$DISTROSCRIPT** - Version of the script
 
 If information isn't available or applicable for any of the variables, they are left blank.
@@ -49,15 +51,16 @@ Functions:
  * **getdistro**     - exports DISTRO as the distribution name
  * **getversion**    - exports VERSION as the distribution/os version
  * **getvirt**       - exports VIRT as the virtualisation technology
+ * **getcont**       - exports CONT as the container technology
 
 Notes:
  * On FreeBSD and OpenBSD, where it is a generic install, the distro field is left blank and the distrover is populated with the kernel name.
  * **x86_64** is normalised to **amd64**, **ix86** is normalised to **i386**.
  * Values for **VIRT** use the naming convention from **[systemd-detect-virt](https://www.freedesktop.org/software/systemd/man/systemd-detect-virt.html "systemd-detect-virt")** with the exception of FreeBSD jails.
- * Where we can identify the subtype of virtualisation it is presented colon seperated, e.g **kvm:jail**.
- * In a large majority of cases, detecting virtualisation just doesn't work either due to the OS being **stupid** (most cases) or people changing the presented dmi strings, or people using VirtualBox using another emulation type.
+ * Where we can identify the subtype of virtualisation it is presented colon seperated (in the case of pipe), e.g **kvm:jail**.
+ * If the DMI strings or virtual cpu names have been changed, or running on a particularly old OS there is a likely chance that the detected virtualisation will be wrong.
 
 Output:
- * Default output is pipe deliminated: `OS|KERNEL|ARCH|DISTRO|VERSION|VIRT`
+ * Default output is pipe deliminated: `OS|KERNEL|ARCH|DISTRO|VERSION|VIRT[:CONT]`
  * Possible output options are: *pipe*, *twopipe*, *ini*, *export*, *json*
  * Set `$DISTROFORMAT` environment variable to change output. Example: `DISTROFORMAT=export ./distro`
