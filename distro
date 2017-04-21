@@ -47,7 +47,7 @@
 #   URL: [https://gitlab.com/joewholden/distroscript]
 #   README: [https://gitlab.com/joewholden/distroscript/blob/master/README.md]
 
-DISTROSCRIPT="1.3.1"
+DISTROSCRIPT="1.3.2"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -308,10 +308,10 @@ detectvirt() {
             type=vmware
             ;;
         HVM*domU*)
-            type=xen:hvm
+            type=xenhvm
             ;;
         [Xx][Ee][Nn]*)
-            type=xen:pv
+            type=xenpv
             ;;
         [Mm][Ii][Cc][Rr][Oo][Ss][Oo][Ff][Tt]|[Vv][Ii][Rr][Tt][Uu][Aa][Ll]*)
             type=microsoft
@@ -354,8 +354,20 @@ detectcont() {
 getcont() {
     CONT="none"
     if [ "${OS}" = "Linux" ]; then
-        if [ -f /usr/bin/systemd-detect-virt ]; then
-            CONT=`/usr/bin/systemd-detect-virt -c`
+        if [ "${CONT}" = "none" ]; then
+            if [ -f /usr/bin/systemd-detect-virt ]; then
+                CONT=`/usr/bin/systemd-detect-virt -c`
+            fi
+        fi
+        if [ "${CONT}" = "none" ]; then
+            if [ -f /.dockerenv ]; then
+                CONT=docker
+            fi
+        fi
+        if [ "${CONT}" = "none" ]; then
+            if grep -qa docker /proc/1/cgroup; then
+                CONT=docker
+            fi
         fi
     elif [ "${OS}" = "FreeBSD" -o "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
         if [ "${OS}" = "FreeBSD" ]; then
