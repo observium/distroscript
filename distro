@@ -47,7 +47,7 @@
 #   URL: [https://gitlab.com/joewholden/distroscript]
 #   README: [https://gitlab.com/joewholden/distroscript/blob/master/README.md]
 
-DISTROSCRIPT="1.2.1"
+DISTROSCRIPT="1.2.2"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -313,7 +313,7 @@ detectvirt() {
             ;;
         HVM*domU*)
             type=xen:hvm
-        ;;
+            ;;
         [Xx][Ee][Nn]*)
             type=xen:pv
             ;;
@@ -329,6 +329,9 @@ detectvirt() {
         Standard*PC*Q*ICH*)
             type=kvm
             ;;
+        zvm|oracle|bochs|uml|parallels)
+            type=${1}
+            ;;
         *)
             type=none
             ;;
@@ -338,14 +341,15 @@ detectvirt() {
 }
 
 getvirt() {
+    VIRT="none"
     if [ "${OS}" = "Linux" ]; then
-        if [ -f `which dmidecode 2>/dev/null` ]; then
-            tmp=`dmidecode -s system-product-name 2>/dev/null`
+        if [ -f /usr/bin/systemd-detect-virt ]; then
+            tmp=`/usr/bin/systemd-detect-virt -v`
             VIRT=`detectvirt "${tmp}"`
         fi
         if [ "${VIRT}" = "none" ]; then
-            if [ -f /usr/bin/systemd-detect-virt ]; then
-                tmp=`/usr/bin/systemd-detect-virt`
+            if [ -f `which dmidecode 2>/dev/null` ]; then
+                tmp=`dmidecode -s system-product-name 2>/dev/null`
                 VIRT=`detectvirt "${tmp}"`
             fi
         fi
@@ -356,22 +360,24 @@ getvirt() {
             fi
         fi
     elif [ "${OS}" = "FreeBSD" -o "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
-        tmp=`sysctl -n hw.hv_vendor 2>/dev/null`
-        VIRT=`detectvirt "${tmp}"`
-        if [ "${VIRT}" = "none" ]; then
-            tmp=`sysctl -n hw.model 2>/dev/null`
+        if [ "${OS}" = "FreeBSD" ]; then
+            tmp=`sysctl -n hw.hv_vendor 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
+            if [ "${VIRT}" = "none" ]; then
+                tmp=`sysctl -n machdep.dmi.system-vendor 2>/dev/null`
+                VIRT=`detectvirt "${tmp}"`
+            fi
+            if [ "${VIRT}" = "none" ]; then
+                tmp=`sysctl -n machdep.dmi.system-product 2>/dev/null`
+                VIRT=`detectvirt "${tmp}"`
+            fi
         fi
         if [ "${VIRT}" = "none" ]; then
             tmp=`sysctl -n hw.product 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
         if [ "${VIRT}" = "none" ]; then
-            tmp=`sysctl -n machdep.dmi.system-vendor 2>/dev/null`
-            VIRT=`detectvirt "${tmp}"`
-        fi
-        if [ "${VIRT}" = "none" ]; then
-            tmp=`sysctl -n machdep.dmi.system-product 2>/dev/null`
+            tmp=`sysctl -n hw.model 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
         if [ "${OS}" = "FreeBSD" ]; then
