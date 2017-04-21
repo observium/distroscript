@@ -454,15 +454,16 @@ getvirt() {
     return 0
 }
 
-getos
-getkernel
-getarch
-getdistro
-getversion
-getvirt
-getcont
-
 if [ -z ${DISTROEXEC+x} ]; then
+
+    getos
+    getkernel
+    getarch
+    getdistro
+    getversion
+    getvirt
+    getcont
+
     if [ "${AGENT_LIBDIR}" -o "${MK_LIBDIR}" ]; then
         echo "<<<distro>>>"
     fi
