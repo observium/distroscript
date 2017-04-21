@@ -47,7 +47,7 @@
 #   URL: [https://gitlab.com/joewholden/distroscript]
 #   README: [https://gitlab.com/joewholden/distroscript/blob/master/README.md]
 
-DISTROSCRIPT="1.3.2"
+DISTROSCRIPT="1.3.3"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -318,9 +318,6 @@ detectvirt() {
             ;;
         [Bb][Hh][Yy][Vv][Ee]*)
             type=bhyve
-            ;;
-        [Vv][Uu][Ll][Tt][Rr]|[Dd][Rr][Oo][Pp][Ll][Ee][Tt]*)
-            type=kvm
             ;;
         Standard*PC*Q*ICH*|Standard*PC*i440FX*PIIX*)
             type=qemu
