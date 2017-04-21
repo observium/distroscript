@@ -56,8 +56,8 @@ Functions:
 Notes:
  * On FreeBSD and OpenBSD, where it is a generic install, the distro field is left blank and the distrover is populated with the kernel name.
  * **x86_64** is normalised to **amd64**, **ix86** is normalised to **i386**.
- * Values for **VIRT** use the naming convention from **[systemd-detect-virt](https://www.freedesktop.org/software/systemd/man/systemd-detect-virt.html "systemd-detect-virt")** with the exception of FreeBSD jails.
- * Where we can identify the subtype of virtualisation it is presented colon seperated (in the case of pipe), e.g **kvm:jail**.
+ * Values for **VIRT** and **CONT** use the naming convention from **[systemd-detect-virt](https://www.freedesktop.org/software/systemd/man/systemd-detect-virt.html "systemd-detect-virt")** with the exception of FreeBSD jails.
+ * Where we can identify the container, it is presented colon seperated (in the case of pipe), e.g **kvm:jail**.
  * If the DMI strings or virtual cpu names have been changed, or running on a particularly old OS there is a likely chance that the detected virtualisation will be wrong.
 
 Output:
