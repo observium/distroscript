@@ -301,7 +301,6 @@ getversion() {
 }
 
 detectvirt() {
-    local virt
     local type
     type=none
     case $1 in
@@ -326,8 +325,8 @@ detectvirt() {
         [Vv][Uu][Ll][Tt][Rr]|[Dd][Rr][Oo][Pp][Ll][Ee][Tt]*)
             type=kvm
             ;;
-        Standard*PC*Q*ICH*)
-            type=kvm
+        Standard*PC*Q*ICH*|Standard*PC*i440FX*PIIX*)
+            type=qemu
             ;;
         zvm|oracle|bochs|uml|parallels)
             type=${1}
@@ -340,12 +339,50 @@ detectvirt() {
     echo $type
 }
 
+detectcont() {
+    local type
+    type=none
+    case $1 in
+        *)
+            type=${1}
+            ;;
+    esac
+
+    echo $type
+}
+
+getcont() {
+    CONT="none"
+    if [ "${OS}" = "Linux" ]; then
+        if [ -f /usr/bin/systemd-detect-virt ]; then
+            CONT=`/usr/bin/systemd-detect-virt -c`
+        fi
+    elif [ "${OS}" = "FreeBSD" -o "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
+        if [ "${OS}" = "FreeBSD" ]; then
+            tmp=`sysctl -n security.jail.jailed 2>/dev/null`
+            if [ "${tmp}" = "1" ]; then
+                CONT=jail
+            fi
+        fi
+    else
+        CONT=""
+    fi
+    export CONT
+    return 0
+}
+
 getvirt() {
     VIRT="none"
     if [ "${OS}" = "Linux" ]; then
         if [ -f /usr/bin/systemd-detect-virt ]; then
             tmp=`/usr/bin/systemd-detect-virt -v`
             VIRT=`detectvirt "${tmp}"`
+        fi
+        if [ "${VIRT}" = "none" ]; then
+            if [ -f /sys/devices/virtual/dmi/id/product_name ]; then
+                tmp=`cat /sys/devices/virtual/dmi/id/product_name`
+                VIRT=`detectvirt "${tmp}"`
+            fi
         fi
         if [ "${VIRT}" = "none" ]; then
             if [ -f `which dmidecode 2>/dev/null` ]; then
@@ -380,16 +417,6 @@ getvirt() {
             tmp=`sysctl -n hw.model 2>/dev/null`
             VIRT=`detectvirt "${tmp}"`
         fi
-        if [ "${OS}" = "FreeBSD" ]; then
-            tmp=`sysctl -n security.jail.jailed 2>/dev/null`
-            if [ "${tmp}" = "1" ]; then
-                if [ "${VIRT}" = "none" ]; then
-                    VIRT=jail
-                else
-                    VIRT=${VIRT}:jail
-                fi
-            fi
-        fi
     else
         VIRT=""
     fi
@@ -403,13 +430,18 @@ getarch
 getdistro
 getversion
 getvirt
+getcont
 
 if [ -z ${DISTROEXEC+x} ]; then
     if [ "${AGENT_LIBDIR}" -o "${MK_LIBDIR}" ]; then
         echo "<<<distro>>>"
     fi
     if [ "${DISTROFORMAT}" = "twopipe" ]; then
-        echo "${OS}||${KERNEL}||${ARCH}||${DISTRO}||${VERSION}||${VIRT}"
+        if [ "${CONT}" = "none" ]; then
+            echo "${OS}||${KERNEL}||${ARCH}||${DISTRO}||${VERSION}||${VIRT}"
+        else
+            echo "${OS}||${KERNEL}||${ARCH}||${DISTRO}||${VERSION}||${VIRT}:${CONT}"
+        fi
     elif [ "${DISTROFORMAT}" = "ini" ]; then
         echo "[distroscript]"
         echo "  OS = ${OS}"
@@ -418,6 +450,7 @@ if [ -z ${DISTROEXEC+x} ]; then
         echo "  DISTRO = ${DISTRO}"
         echo "  VERSION = ${VERSION}"
         echo "  VIRT = ${VIRT}"
+        echo "  CONT = ${CONT}"
         echo "  SCRIPTVER = ${DISTROSCRIPT}"
     elif [ "${DISTROFORMAT}" = "export" ]; then
         echo "OS=${OS}"
@@ -426,11 +459,16 @@ if [ -z ${DISTROEXEC+x} ]; then
         echo "DISTRO=${DISTRO}"
         echo "VERSION=${VERSION}"
         echo "VIRT=${VIRT}"
+        echo "CONT=${CONT}"
         echo "SCRIPTVER=${DISTROSCRIPT}"
     elif [ "${DISTROFORMAT}" = "json" ]; then
-        echo "{\"os\":\"${OS}\",\"kernel\":\"${KERNEL}\",\"arch\":\"${ARCH}\",\"distro\":\"${DISTRO}\",\"version\":\"${VERSION}\",\"virt\":\"${VIRT}\",\"scriptver\":\"${DISTROSCRIPT}\"}"
+        echo "{\"os\":\"${OS}\",\"kernel\":\"${KERNEL}\",\"arch\":\"${ARCH}\",\"distro\":\"${DISTRO}\",\"version\":\"${VERSION}\",\"virt\":\"${VIRT}\",\"cont\":\"${CONT}\",\"scriptver\":\"${DISTROSCRIPT}\"}"
     else
-        echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}|${VIRT}"
+        if [ "${CONT}" = "none" ]; then
+            echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}|${VIRT}"
+        else
+            echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}|${VIRT}:${CONT}"
+        fi
     fi
     exit 0
 fi
