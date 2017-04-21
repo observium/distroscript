@@ -47,7 +47,7 @@
 #   URL: [https://gitlab.com/joewholden/distroscript]
 #   README: [https://gitlab.com/joewholden/distroscript/blob/master/README.md]
 
-DISTROSCRIPT="1.3"
+DISTROSCRIPT="1.3.1"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -323,6 +323,9 @@ detectvirt() {
             type=kvm
             ;;
         Standard*PC*Q*ICH*|Standard*PC*i440FX*PIIX*)
+            type=qemu
+            ;;
+        QEMU*Virtual*CPU*)
             type=qemu
             ;;
         zvm|oracle|bochs|uml|parallels|kvm|qemu)
