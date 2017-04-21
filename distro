@@ -325,7 +325,7 @@ detectvirt() {
         QEMU*Virtual*CPU*)
             type=qemu
             ;;
-        KVMKVMKVM*)
+        KVM*)
             type=kvm
             ;;
         zvm|oracle|bochs|uml|parallels|kvm|qemu)
