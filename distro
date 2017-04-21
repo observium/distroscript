@@ -47,7 +47,7 @@
 #   URL: [https://gitlab.com/joewholden/distroscript]
 #   README: [https://gitlab.com/joewholden/distroscript/blob/master/README.md]
 
-DISTROSCRIPT="1.2.2"
+DISTROSCRIPT="1.3"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -304,9 +304,6 @@ detectvirt() {
     local type
     type=none
     case $1 in
-        [Kk][Vv][Mm]|[Qq][Ee][Mm][Uu]*)
-            type=kvm
-            ;;
         [Vv][Mm][Ww][Aa][Rr][Ee]*)
             type=vmware
             ;;
@@ -328,7 +325,7 @@ detectvirt() {
         Standard*PC*Q*ICH*|Standard*PC*i440FX*PIIX*)
             type=qemu
             ;;
-        zvm|oracle|bochs|uml|parallels)
+        zvm|oracle|bochs|uml|parallels|kvm|qemu)
             type=${1}
             ;;
         *)
@@ -374,9 +371,11 @@ getcont() {
 getvirt() {
     VIRT="none"
     if [ "${OS}" = "Linux" ]; then
-        if [ -f /usr/bin/systemd-detect-virt ]; then
-            tmp=`/usr/bin/systemd-detect-virt -v`
-            VIRT=`detectvirt "${tmp}"`
+        if [ "${VIRT}" = "none" ]; then
+            if [ -f /usr/bin/systemd-detect-virt ]; then
+                tmp=`/usr/bin/systemd-detect-virt -v`
+                VIRT=`detectvirt "${tmp}"`
+            fi
         fi
         if [ "${VIRT}" = "none" ]; then
             if [ -f /sys/devices/virtual/dmi/id/product_name ]; then
@@ -396,6 +395,12 @@ getvirt() {
                 VIRT=`detectvirt "${tmp}"`
             fi
         fi
+    if [ "${VIRT}" = "qemu" ]; then
+        tmp=`dmesg | grep -ciF 'Booting paravirtualized kernel on KVM'`
+        if [ "${tmp}" = "1" ]; then
+            VIRT=kvm
+        fi
+    fi
     elif [ "${OS}" = "FreeBSD" -o "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
         if [ "${OS}" = "FreeBSD" ]; then
             tmp=`sysctl -n hw.hv_vendor 2>/dev/null`
