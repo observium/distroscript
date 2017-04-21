@@ -413,12 +413,12 @@ getvirt() {
                 VIRT=`detectvirt "${tmp}"`
             fi
         fi
-    if [ "${VIRT}" = "qemu" ]; then
-        tmp=`dmesg | grep -ciF 'Booting paravirtualized kernel on KVM'`
-        if [ "${tmp}" = "1" ]; then
-            VIRT=kvm
+        if [ "${VIRT}" = "qemu" ]; then
+            tmp=`dmesg | grep -ciF 'Booting paravirtualized kernel on KVM'`
+            if [ "${tmp}" = "1" ]; then
+                VIRT=kvm
+            fi
         fi
-    fi
     elif [ "${OS}" = "FreeBSD" -o "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
         if [ "${OS}" = "FreeBSD" ]; then
             tmp=`sysctl -n hw.hv_vendor 2>/dev/null`
@@ -431,6 +431,10 @@ getvirt() {
                 tmp=`sysctl -n machdep.dmi.system-product 2>/dev/null`
                 VIRT=`detectvirt "${tmp}"`
             fi
+        fi
+        if [ "${OS}" = "OpenBSD" ]; then
+            tmp=`dmesg | grep pvbus0 | awk '{print $4}'`
+            VIRT=`detectvirt "${tmp}"`
         fi
         if [ "${VIRT}" = "none" ]; then
             tmp=`sysctl -n hw.product 2>/dev/null`
