@@ -367,6 +367,9 @@ getcont() {
     else
         CONT=""
     fi
+    if [ "${CONT}" = "none" ]; then
+        CONT=""
+    fi
     export CONT
     return 0
 }
@@ -428,6 +431,9 @@ getvirt() {
     else
         VIRT=""
     fi
+    if [ "${VIRT}" = "none" ]; then
+        VIRT=""
+    fi
     export VIRT
     return 0
 }
@@ -445,11 +451,7 @@ if [ -z ${DISTROEXEC+x} ]; then
         echo "<<<distro>>>"
     fi
     if [ "${DISTROFORMAT}" = "twopipe" ]; then
-        if [ "${CONT}" = "none" ]; then
-            echo "${OS}||${KERNEL}||${ARCH}||${DISTRO}||${VERSION}||${VIRT}"
-        else
-            echo "${OS}||${KERNEL}||${ARCH}||${DISTRO}||${VERSION}||${VIRT}:${CONT}"
-        fi
+        echo "${OS}||${KERNEL}||${ARCH}||${DISTRO}||${VERSION}||${VIRT}||${CONT}"
     elif [ "${DISTROFORMAT}" = "ini" ]; then
         echo "[distroscript]"
         echo "  OS = ${OS}"
@@ -472,11 +474,7 @@ if [ -z ${DISTROEXEC+x} ]; then
     elif [ "${DISTROFORMAT}" = "json" ]; then
         echo "{\"os\":\"${OS}\",\"kernel\":\"${KERNEL}\",\"arch\":\"${ARCH}\",\"distro\":\"${DISTRO}\",\"version\":\"${VERSION}\",\"virt\":\"${VIRT}\",\"cont\":\"${CONT}\",\"scriptver\":\"${DISTROSCRIPT}\"}"
     else
-        if [ "${CONT}" = "none" ]; then
-            echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}|${VIRT}"
-        else
-            echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}|${VIRT}:${CONT}"
-        fi
+        echo "${OS}|${KERNEL}|${ARCH}|${DISTRO}|${VERSION}|${VIRT}|${CONT}"
     fi
     exit 0
 fi
