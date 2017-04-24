@@ -41,6 +41,7 @@ Variables:
  * **$VIRT**         - Virtualisation tech, if any (or the OS is useful enough to tell us)
  * **$CONT**         - Container tech, if any (or the OS is useful enough to tell us)
  * **$DISTROSCRIPT** - Version of the script
+**Note:** The variables above are no longer exported just by sourcing the script, you need to explicitly run one or more of the functions below.
 
 If information isn't available or applicable for any of the variables, they are left blank.
 
