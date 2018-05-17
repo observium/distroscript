@@ -47,7 +47,7 @@
 #   URL: [https://gitlab.com/joewholden/distroscript]
 #   README: [https://gitlab.com/joewholden/distroscript/blob/master/README.md]
 
-DISTROSCRIPT="2.0"
+DISTROSCRIPT="2.1"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -365,7 +365,7 @@ getcont() {
             fi
         fi
         if [ "${CONT}" = "none" ]; then
-            if grep -qa docker /proc/1/cgroup; then
+            if grep -qa docker /proc/1/cgroup 2>/dev/null; then
                 CONT=docker
             fi
         fi
