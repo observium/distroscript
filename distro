@@ -355,17 +355,17 @@ getcont() {
     CONT="none"
     if [ "${OS}" = "Linux" ]; then
         if [ "${CONT}" = "none" ]; then
+            if grep -qa docker /proc/1/cgroup 2>/dev/null; then
+                CONT=docker
+            fi
+        fi
+        if [ "${CONT}" = "none" ]; then
             if [ -f /usr/bin/systemd-detect-virt ]; then
                 CONT=`/usr/bin/systemd-detect-virt -c`
             fi
         fi
         if [ "${CONT}" = "none" ]; then
             if [ -f /.dockerenv ]; then
-                CONT=docker
-            fi
-        fi
-        if [ "${CONT}" = "none" ]; then
-            if grep -qa docker /proc/1/cgroup 2>/dev/null; then
                 CONT=docker
             fi
         fi
