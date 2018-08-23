@@ -30,7 +30,7 @@ Usage
 You can either include the script in your own application or execute it directly.
 Before sourcing the script, set `$DISTROEXEC`.
 
-No dependencies, should work on anything sh compatible environment (ksh, bash etc)
+No dependencies, should work in any sh compatible environment (ksh, bash etc)
 
 Variables:
  * **$OS**           - Operating System (eg Linux, Solaris, FreeBSD)
