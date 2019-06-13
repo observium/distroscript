@@ -47,7 +47,7 @@
 #   URL: [https://gitlab.com/joewholden/distroscript]
 #   README: [https://gitlab.com/joewholden/distroscript/blob/master/README.md]
 
-DISTROSCRIPT="2.2"
+DISTROSCRIPT="2.2.1"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -418,12 +418,6 @@ getvirt() {
             if [ -f /proc/cpuinfo ]; then
                 tmp=`grep 'model name' /proc/cpuinfo | cut -d\  -f3-`
                 VIRT=`detectvirt "${tmp}"`
-            fi
-        fi
-        if [ "${VIRT}" = "qemu" ]; then
-            tmp=`dmesg | grep -ciF 'Booting paravirtualized kernel on KVM'`
-            if [ "${tmp}" = "1" ]; then
-                VIRT=kvm
             fi
         fi
     elif [ "${OS}" = "FreeBSD" -o "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
