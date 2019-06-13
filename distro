@@ -356,7 +356,7 @@ getcont() {
     if [ "${OS}" = "Linux" ]; then
 		if [ "${CONT}" = "none" ]; then
 			if [ -f /proc/user_beancounters ]; then
-				if [ "`grep 'envID:' /proc/self/status | awk '{print $2}'`" -gt 0 ]; then
+				if [ "`grep 'envID:' /proc/self/status | awk '{print $2}'`" != "0" ]; then
 					CONT=openvz
 				fi
 			fi
