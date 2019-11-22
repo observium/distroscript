@@ -2,7 +2,7 @@
 #
 #   Observium License Version 1.0
 #
-#   Copyright (c) 2013-2018 Joe Holden, (c) 2015 Mike Stupalov
+#   Copyright (c) 2013-2019 Joe Holden, (c) 2015 Mike Stupalov
 #
 #   The intent of this license is to establish the freedom to use, share and contribute to
 #   the software regulated by this license.
@@ -44,8 +44,7 @@
 #   The Software and this license document are provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 #   WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 #
-#   URL: [https://gitlab.com/joewholden/distroscript]
-#   README: [https://gitlab.com/joewholden/distroscript/blob/master/README.md]
+#   URL: [https://github.com/joewholden/distroscript]
 
 DISTROSCRIPT="2.2.1"
 
