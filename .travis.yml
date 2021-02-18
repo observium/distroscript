@@ -1,13 +1,11 @@
 language: sh
-dist: trusty
-
-before_install:
-    - sudo apt-get -y install dmidecode
-    - sudo apt-get -y install virt-what
 
 addons:
     apt:
         update: true
+    packages:
+        - dmidecode
+        - virt-what
 
 script:
     - DISTROFORMAT="export" ./distro
@@ -21,4 +19,15 @@ after_script:
     - cat /sys/devices/virtual/dmi/id/product_name
     - cat /proc/cpuinfo
     - sudo dmidecode -s system-product-name
-    - virt-what
+    - sudo virt-what
+
+jobs:
+    include:
+        - dist: trusty
+          arch: amd64
+        - dist: xenial
+          arch: amd64
+        - dist: xenial
+          arch: arm64
+        - dist: xenial
+          arch: ppc64le
