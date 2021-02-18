@@ -14,8 +14,7 @@ script:
 after_script:
     - env
     - cat /proc/1/cgroup
-    - cat /proc/1/sched
-    - cat /proc/self/cgroup
+    - cat /proc/device-tree/hypervisor/compatible
     - cat /sys/devices/virtual/dmi/id/product_name
     - cat /proc/cpuinfo
     - /usr/bin/systemd-detect-virt
