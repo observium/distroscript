@@ -320,11 +320,14 @@ detectvirt() {
         QEMU*Virtual*CPU*)
             type=qemu
             ;;
-        KVM*)
+        KVM*|[Go][Oo][Oo][Gg][Ll][Ee]*)
             type=kvm
             ;;
-        zvm|oracle|bochs|uml|parallels|kvm|qemu)
-            type=${1}
+        zvm|oracle|bochs|uml|parallels|kvm|qemu|qnx|acrn|powervm)
+            type="${1}"
+            ;;
+        vm-other)
+            type=other
             ;;
         *)
             type=none
@@ -339,7 +342,7 @@ detectcont() {
     type=none
     case $1 in
         *)
-            type=${1}
+            type="${1}"
             ;;
     esac
 
@@ -349,27 +352,23 @@ detectcont() {
 getcont() {
     CONT="none"
     if [ "${OS}" = "Linux" ]; then
-		if [ "${CONT}" = "none" ]; then
-			if [ -f /proc/user_beancounters ]; then
-				if [ "`awk '/envID:/ {print $2}' /proc/self/status 2>/dev/null`" != "0" ]; then
-					CONT=openvz
-				fi
-			fi
+		if [ "${CONT}" = "none" -a -f /proc/user_beancounters ]; then
+            if [ "`awk '/envID:/ {print $2}' /proc/self/status 2>/dev/null`" != "0" ]; then
+                CONT=openvz
+            fi
 		fi
-        if [ "${CONT}" = "none" ]; then
+        if [ "${CONT}" = "none" -a -f /usr/bin/systemd-detect-virt ]; then
+            CONT=`/usr/bin/systemd-detect-virt -c`
+        fi
+        if [ "${CONT}" = "none" -a -f /proc/1/cgroup ]; then
             if grep -qa docker /proc/1/cgroup 2>/dev/null; then
                 CONT=docker
+            elif grep -qa lxc /proc/1/cgroup 2>/dev/null; then
+                CONT=lxc
             fi
         fi
-        if [ "${CONT}" = "none" ]; then
-            if [ -f /usr/bin/systemd-detect-virt ]; then
-                CONT=`/usr/bin/systemd-detect-virt -c`
-            fi
-        fi
-        if [ "${CONT}" = "none" ]; then
-            if [ -f /.dockerenv ]; then
-                CONT=docker
-            fi
+        if [ "${CONT}" = "none" -a -f /.dockerenv ]; then
+            CONT=docker
         fi
     elif [ "${OS}" = "FreeBSD" -o "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
         if [ "${OS}" = "FreeBSD" ]; then
@@ -391,17 +390,13 @@ getcont() {
 getvirt() {
     VIRT="none"
     if [ "${OS}" = "Linux" ]; then
-        if [ "${VIRT}" = "none" ]; then
-            if [ -f /usr/bin/systemd-detect-virt ]; then
-                tmp=`/usr/bin/systemd-detect-virt -v`
-                VIRT=`detectvirt "${tmp}"`
-            fi
+        if [ "${VIRT}" = "none" -a -f /usr/bin/systemd-detect-virt ]; then
+            tmp=`/usr/bin/systemd-detect-virt -v`
+            VIRT=`detectvirt "${tmp}"`
         fi
-        if [ "${VIRT}" = "none" ]; then
-            if [ -f /sys/devices/virtual/dmi/id/product_name ]; then
-                tmp=`cat /sys/devices/virtual/dmi/id/product_name`
-                VIRT=`detectvirt "${tmp}"`
-            fi
+        if [ "${VIRT}" = "none" -a -f /sys/devices/virtual/dmi/id/product_name ]; then
+            tmp=`cat /sys/devices/virtual/dmi/id/product_name`
+            VIRT=`detectvirt "${tmp}"`
         fi
         if [ "${VIRT}" = "none" ]; then
             if [ -f `which dmidecode 2>/dev/null` ]; then
