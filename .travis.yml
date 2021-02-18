@@ -1,11 +1,12 @@
 language: sh
 
+before_install:
+    - sudo apt-get -y install dmidecode
+    - sudo apt-get -y install virt-what
+
 addons:
     apt:
         update: true
-    packages:
-        - dmidecode
-        - virt-what
 
 script:
     - DISTROFORMAT="export" ./distro
@@ -15,9 +16,9 @@ after_script:
     - cat /proc/1/cgroup
     - cat /proc/1/sched
     - cat /proc/self/cgroup
-    - cat /usr/bin/systemd-detect-virt
     - cat /sys/devices/virtual/dmi/id/product_name
     - cat /proc/cpuinfo
+    - /usr/bin/systemd-detect-virt
     - sudo dmidecode -s system-product-name
     - sudo virt-what
 
