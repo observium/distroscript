@@ -1,11 +1,22 @@
 language: sh
 dist: trusty
 
+before_install:
+    - sudo apt-get -y install dmidecode
+
+addons:
+    apt:
+        update: true
+
 script:
     - DISTROFORMAT="export" ./distro
     
 after_script:
     - env
     - cat /proc/1/cgroup
-    - cat /.dockerenv
-    - cat /.dockerinit
+    - cat /proc/1/sched
+    - cat /proc/self/cgroup
+    - cat /usr/bin/systemd-detect-virt
+    - cat /sys/devices/virtual/dmi/id/product_name
+    - cat /proc/cpuinfo
+    - dmidecode -s system-product-name
