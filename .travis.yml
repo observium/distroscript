@@ -1,8 +1,5 @@
 language: sh
 
-before_install:
-    - sudo apt-get -y install dmidecode
-
 addons:
     apt:
         update: true
@@ -18,14 +15,24 @@ after_script:
     - cat /proc/cpuinfo
     - /usr/bin/systemd-detect-virt
     - sudo dmidecode -s system-product-name
+    - sudo virt-what
 
 jobs:
     include:
         - dist: trusty
           arch: amd64
+          before_install:
+            - sudo apt-get -y install dmidecode
+            - sudo apt-get -y install virt-what
         - dist: xenial
           arch: amd64
+          before_install:
+            - sudo apt-get -y install dmidecode
+            - sudo apt-get -y install virt-what
         - dist: xenial
           arch: arm64
+          before_install:
+            - sudo apt-get -y install dmidecode
+            - sudo apt-get -y install virt-what
         - dist: xenial
           arch: ppc64le
