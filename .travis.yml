@@ -1,6 +1,11 @@
 language: sh
 dist: trusty
 
-
 script:
-    - sh ./distro
+    - DISTROFORMAT="export" ./distro
+    
+after_script:
+    - env
+    - cat /proc/1/cgroup
+    - cat /.dockerenv
+    - cat /.dockerinit
