@@ -46,7 +46,7 @@
 #
 #   URL: [https://github.com/jwh/distroscript]
 
-DISTROSCRIPT="2.2.1"
+DISTROSCRIPT="2.2.2"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -91,7 +91,7 @@ getdistro() {
         elif [ -x /usr/bin/lsb_release ]; then
             DISTRO=`/usr/bin/lsb_release -si 2>/dev/null`
         elif [ -f /etc/redhat-release ]; then
-            DISTRO=`cat /etc/redhat-release | awk '{print $1}'`
+            DISTRO=`cat /etc/redhat-release | cut -d" " -f1`
         elif [ -f /etc/fedora-release ]; then
             DISTRO="Fedora"
         elif [ -f /etc/debian_version ]; then
@@ -269,7 +269,7 @@ getversion() {
         elif [ "${DISTRO}" = "Slackware" ]; then
             VERSION=`cat /etc/slackware-version | cut -d" " -f2`
         elif [ -f /etc/redhat-release ]; then
-            VERSION=`cat /etc/redhat-release | sed 's/.*release\ //' | sed 's/\ .*//'`
+            VERSION=`cat /etc/redhat-release | sed 's/.*release\ //' | cut -d" " -f1`
         elif [ -x /usr/bin/lsb_release ]; then
             VERSION=`lsb_release -sr 2>/dev/null`
         elif [ -f /etc/debian_version ]; then
@@ -351,7 +351,7 @@ getcont() {
     if [ "${OS}" = "Linux" ]; then
 		if [ "${CONT}" = "none" ]; then
 			if [ -f /proc/user_beancounters ]; then
-				if [ "`grep 'envID:' /proc/self/status | awk '{print $2}'`" != "0" ]; then
+				if [ "`awk '/envID:/ {print $2}' /proc/self/status 2>/dev/null`" != "0" ]; then
 					CONT=openvz
 				fi
 			fi
