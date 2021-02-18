@@ -3,6 +3,7 @@ dist: trusty
 
 before_install:
     - sudo apt-get -y install dmidecode
+    - sudo apt-get -y install virt-what
 
 addons:
     apt:
@@ -19,4 +20,5 @@ after_script:
     - cat /usr/bin/systemd-detect-virt
     - cat /sys/devices/virtual/dmi/id/product_name
     - cat /proc/cpuinfo
-    - dmidecode -s system-product-name
+    - sudo dmidecode -s system-product-name
+    - virt-what
