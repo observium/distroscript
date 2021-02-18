@@ -261,6 +261,7 @@ getversion() {
     elif [ "${OS}" = "OpenBSD" -o "${OS}" = "NetBSD" ]; then
         VERSION=`uname -r`
     elif [ "${OS}" = "Linux" ]; then
+        VERSION=none
         if [ "${DISTRO}" = "Debian GNU/Linux" ]; then
             DISTRO="Debian"
         fi
@@ -268,17 +269,24 @@ getversion() {
             VERSION=`cat /etc/openwrt_version`
         elif [ "${DISTRO}" = "Slackware" ]; then
             VERSION=`cat /etc/slackware-version | cut -d" " -f2`
+        elif [ -f /etc/os-release ]; then
+            . /etc/os-release
+            VERSION="${VERSION_ID}"
         elif [ -f /etc/redhat-release ]; then
             VERSION=`cat /etc/redhat-release | sed 's/.*release\ //' | cut -d" " -f1`
         elif [ -x /usr/bin/lsb_release ]; then
             VERSION=`lsb_release -sr 2>/dev/null`
         elif [ -f /etc/debian_version ]; then
-            # prefer accurate debian version, instead VERSION_ID (10.8 instead 10)
-            VERSION=`cat /etc/debian_version | cut -d" " -f1`
-        elif [ -f /etc/os-release ]; then
+            tmp=`cat /etc/debian_version | cut -d"." -f1`
+            if [ "${tmp}" == [0-9]* ]; then
+                VERSION="${tmp}"
+            fi
+        fi    
+        if [ "${VERSION}" = "none" -a -f /etc/os-release ]; then
             . /etc/os-release
             VERSION="${VERSION_ID}"
-        else
+        fi
+        if [ "${VERSION}" != [0-9]* ]; then
             VERSION=
         fi
     elif [ "${OS}" = "Darwin" ]; then
