@@ -1,5 +1,6 @@
 language: sh
 dist: trusty
 
+
 script:
     - sh ./distro
