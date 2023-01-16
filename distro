@@ -185,10 +185,13 @@ getdistro() {
             DISTRO=
         fi
 
+        # Additional Distro fixes
         if [ "${DISTRO}" = "Debian GNU/Linux" ]; then
             DISTRO="Debian"
         elif [ "${DISTRO}" = "Red" -o "${DISTRO}" = "RedHatEnterpriseServer" ]; then
             DISTRO="RedHat"
+        elif [ "${DISTRO}" = "VMware Photon" ]; then
+            DISTRO="Photon"
         elif [ "${DISTRO}" = "Arch" ]; then
             DISTRO="ArchLinux"
         fi
