@@ -46,7 +46,7 @@
 #
 #   URL: [https://www.observium.org/files/distro]
 
-DISTROSCRIPT="2.2.5"
+DISTROSCRIPT="2.2.6"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -92,6 +92,10 @@ getdistro() {
                 . /etc/os-release
                 #DISTRO=`echo ${NAME} | awk '{print $1}'`
                 DISTRO="${NAME% *}"
+                if [ "${DISTRO}" = "Linux" ]; then
+                    # ie: Linux Mint
+                    DISTRO="${NAME#Linux *}"
+                fi
             fi
         elif [ -x /usr/bin/lsb_release ]; then
             DISTRO=`/usr/bin/lsb_release -si 2>/dev/null`
