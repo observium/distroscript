@@ -46,7 +46,7 @@
 #
 #   URL: [https://www.observium.org/files/distro]
 
-DISTROSCRIPT="2.2.6"
+DISTROSCRIPT="2.2.7"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -198,6 +198,8 @@ getdistro() {
             DISTRO="pfSense"
         elif [ -f /etc/platform -a -f /etc/prd.name ]; then
             DISTRO=`cat /etc/prd.name`
+        elif [ -x /usr/local/sbin/opnsense-version ]; then
+            DISTRO="OPNsense"
         elif [ -f /usr/local/bin/pbreg ]; then
             DISTRO="PC-BSD"
         elif [ -f /tmp/freenas_config.md5 ]; then
@@ -260,6 +262,8 @@ getversion() {
             VERSION=`cat /etc/version`
         elif [ "${DISTRO}" = "PC-BSD" ]; then
             VERSION=`pbreg get /PC-BSD/Version`
+        elif [ "${DISTRO}" = "OPNsense" ]; then
+            VERSION=`/usr/local/sbin/opnsense-version | awk '{ print $2 }'`
         elif [ -f /etc/prd.version ]; then
             VERSION=`cat /etc/prd.version`
         elif [ -f /bin/freebsd-version ]; then
