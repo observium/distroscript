@@ -205,6 +205,8 @@ getdistro() {
             DISTRO="OPNsense"
         elif [ -f /usr/local/bin/pbreg ]; then
             DISTRO="PC-BSD"
+        elif [ -f /usr/sbin/hbsd-update -o -f /etc/hbsd-update.conf ]; then
+            DISTRO="HardenedBSD"
         elif [ -f /tmp/freenas_config.md5 ]; then
             DISTRO="FreeNAS"
         else
@@ -265,6 +267,9 @@ getversion() {
             VERSION=`cat /etc/version`
         elif [ "${DISTRO}" = "PC-BSD" ]; then
             VERSION=`pbreg get /PC-BSD/Version`
+        #elif [ "${DISTRO}" = "HardenedBSD" ]; then
+        #    tmp=`sysctl -n hardening.version 2>/dev/null`
+        #    VERSION=``
         elif [ "${DISTRO}" = "OPNsense" ]; then
             VERSION=`/usr/local/sbin/opnsense-version | awk '{ print $2 }'`
         elif [ -f /etc/prd.version ]; then
