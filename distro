@@ -46,7 +46,7 @@
 #
 #   URL: [https://www.observium.org/files/distro]
 
-DISTROSCRIPT="2.2.4"
+DISTROSCRIPT="2.2.5"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -412,6 +412,14 @@ getvirt() {
     if [ "${OS}" = "Linux" ]; then
         if [ "${VIRT}" = "none" -a -f /usr/bin/systemd-detect-virt ]; then
             tmp=`/usr/bin/systemd-detect-virt -v`
+            # systemd-detect-virt falsely detects "Microsoft" virtualisation
+            # https://github.com/systemd/systemd/issues/21468
+            if [ "${tmp}" = "microsoft" -a -f /sys/devices/virtual/dmi/id/product_name ]; then
+                tmp2=`cat /sys/devices/virtual/dmi/id/product_name`
+                if [ "${tmp2}" = "KVM" ]; then
+                    tmp="${tmp2}"
+                fi
+            fi
             VIRT=`detectvirt "${tmp}"`
         fi
         if [ "${VIRT}" = "none" -a -f /sys/devices/virtual/dmi/id/product_name ]; then
