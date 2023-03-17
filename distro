@@ -46,7 +46,7 @@
 #
 #   URL: [https://www.observium.org/files/distro]
 
-DISTROSCRIPT="2.2.7"
+DISTROSCRIPT="2.2.8"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -193,7 +193,9 @@ getdistro() {
         elif [ "${DISTRO}" = "VMware Photon" ]; then
             DISTRO="Photon"
         elif [ "${DISTRO}" = "Arch" ]; then
-            DISTRO="ArchLinux"
+            DISTRO="Arch Linux"
+        elif [ "${DISTRO}" = "Amazon" ]; then
+            DISTRO="Amazon Linux"
         fi
 
     elif [ "${OS}" = "FreeBSD" ]; then
@@ -359,7 +361,7 @@ detectvirt() {
         KVM*|[Go][Oo][Oo][Gg][Ll][Ee]*)
             type=kvm
             ;;
-        zvm|oracle|bochs|uml|parallels|kvm|qemu|qnx|acrn|powervm)
+        zvm|oracle|amazon|bochs|uml|parallels|kvm|qemu|qnx|acrn|powervm)
             type="${1}"
             ;;
         vm-other)
