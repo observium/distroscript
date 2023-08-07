@@ -46,7 +46,7 @@
 #
 #   URL: [https://www.observium.org/files/distro]
 
-DISTROSCRIPT="2.2.8"
+DISTROSCRIPT="2.2.9"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -194,6 +194,8 @@ getdistro() {
             DISTRO="Photon"
         elif [ "${DISTRO}" = "Arch" ]; then
             DISTRO="Arch Linux"
+        elif [ "${DISTRO}" = "Orange" ]; then
+            DISTRO="Orange OS"
         elif [ "${DISTRO}" = "Amazon" ]; then
             DISTRO="Amazon Linux"
         fi
@@ -295,6 +297,8 @@ getversion() {
         elif [ "${DISTRO}" = "Armbian" ]; then
             #. /etc/armbian-release
             VERSION=`awk -F '=' '/VERSION=/ { print $2 }' /etc/armbian-release`
+        elif [ -f /etc/orangepi-os-version ]; then
+            VERSION=`awk -F ' - ' '{ print $NF }' /etc/orangepi-os-version | sed 's/-linux.*//'`
         elif [ -f /etc/os-release ]; then
             . /etc/os-release
             VERSION="${VERSION_ID}"
