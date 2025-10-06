@@ -46,7 +46,7 @@
 #
 #   URL: [https://www.observium.org/files/distro]
 
-DISTROSCRIPT="2.3.3"
+DISTROSCRIPT="2.3.4"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -90,6 +90,9 @@ getdistro() {
             elif [ -f /etc/orangepi-release ]; then
                 # Orange Pi uses incorrect os-release
                 DISTRO="Orange OS"
+            elif [ -f /etc/unraid-version ]; then
+                # unRAID uses incorrect os-release
+                DISTRO="Unraid"
             elif [ -f /boot/dietpi/.version ]; then
                 # This is clone of Raspbian, but distro/version incorrect
                 DISTRO="DietPi"
@@ -309,6 +312,8 @@ getversion() {
         elif [ "${DISTRO}" = "DietPi" ]; then
             . /boot/dietpi/.version
             VERSION="${G_DIETPI_VERSION_CORE}.${G_DIETPI_VERSION_SUB}.${G_DIETPI_VERSION_RC}"
+        elif [ "${DISTRO}" = "Unraid" ]; then
+            VERSION=`cat /etc/unraid-version`
         elif [ -f /etc/orangepi-os-version ]; then
             VERSION=`awk -F ' - ' '{ print $NF }' /etc/orangepi-os-version | sed 's/-linux.*//'`
         elif [ -f /etc/os-release ]; then
