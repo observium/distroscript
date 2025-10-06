@@ -46,7 +46,7 @@
 #
 #   URL: [https://www.observium.org/files/distro]
 
-DISTROSCRIPT="2.3.2"
+DISTROSCRIPT="2.3.3"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -194,7 +194,7 @@ getdistro() {
         # Additional Distro fixes
         if [ "${DISTRO}" = "Debian GNU/Linux" ]; then
             DISTRO="Debian"
-        elif [ "${DISTRO}" = "Red" -o "${DISTRO}" = "RedHatEnterpriseServer" ]; then
+        elif [ "${DISTRO}" = "Red" -o "${DISTRO}" = "Red Hat Enterprise" -o "${DISTRO}" = "RedHatEnterpriseServer" ]; then
             DISTRO="RedHat"
         elif [ "${DISTRO}" = "VMware Photon" ]; then
             DISTRO="Photon"
