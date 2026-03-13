@@ -46,7 +46,7 @@
 #
 #   URL: [https://www.observium.org/files/distro]
 
-DISTROSCRIPT="2.3.4"
+DISTROSCRIPT="2.3.5"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -318,7 +318,10 @@ getversion() {
             VERSION=`awk -F ' - ' '{ print $NF }' /etc/orangepi-os-version | sed 's/-linux.*//'`
         elif [ -f /etc/os-release ]; then
             . /etc/os-release
-            VERSION="${VERSION_ID}"
+            # Debian: 12 (bookworm)
+            # Ubuntu: 22.04.5 LTS (Jammy Jellyfish)
+            # Other: 2.29
+            VERSION="${VERSION%% *}"
         elif [ -f /etc/redhat-release ]; then
             VERSION=`cat /etc/redhat-release | sed 's/.*release\ //' | cut -d" " -f1`
         elif [ -x /usr/bin/lsb_release ]; then
@@ -337,7 +340,7 @@ getversion() {
 
         if [ "${VERSION}" = "none" -a -f /etc/os-release ]; then
             . /etc/os-release
-            VERSION="${VERSION_ID}"
+            VERSION="${VERSION%% *}"
         fi
 
     elif [ "${OS}" = "Darwin" ]; then
