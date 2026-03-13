@@ -370,11 +370,23 @@ detectvirt() {
         [Xx][Ee][Nn]*)
             type=xenpv
             ;;
+        [Vv][Ii][Rr][Tt][Uu][Aa][Ll][Bb][Oo][Xx]*)
+            type=oracle
+            ;;
+        [Oo][Rr][Aa][Cc][Ll][Ee]*)
+            type=oracle
+            ;;
         [Mm][Ii][Cc][Rr][Oo][Ss][Oo][Ff][Tt]|[Vv][Ii][Rr][Tt][Uu][Aa][Ll]*)
             type=microsoft
             ;;
+        [Pp][Aa][Rr][Aa][Ll][Ll][Ee][Ll][Ss]*)
+            type=parallels
+            ;;
         [Bb][Hh][Yy][Vv][Ee]*)
             type=bhyve
+            ;;
+        [Aa][Mm][Aa][Zz][Oo][Nn]*)
+            type=amazon
             ;;
         Standard*PC*Q*ICH*|Standard*PC*i440FX*PIIX*)
             type=qemu
@@ -382,7 +394,7 @@ detectvirt() {
         QEMU*Virtual*CPU*)
             type=qemu
             ;;
-        KVM*|[Go][Oo][Oo][Gg][Ll][Ee]*)
+        KVM*|[Gg][Oo][Oo][Gg][Ll][Ee]*)
             type=kvm
             ;;
         zvm|oracle|amazon|bochs|uml|parallels|kvm|qemu|qnx|acrn|powervm)
