@@ -388,7 +388,7 @@ detectvirt() {
         [Aa][Mm][Aa][Zz][Oo][Nn]*)
             type=amazon
             ;;
-        Standard*PC*Q*ICH*|Standard*PC*i440FX*PIIX*|QEMU*|[Qq][Ee][Mm][Uu]*)
+        Standard*PC*Q*ICH*|Standard*PC*i440FX*PIIX*|[Qq][Ee][Mm][Uu]*)
             type=qemu
             ;;
         [Kk][Vv][Mm]*|[Gg][Oo][Oo][Gg][Ll][Ee]*)
