@@ -388,16 +388,13 @@ detectvirt() {
         [Aa][Mm][Aa][Zz][Oo][Nn]*)
             type=amazon
             ;;
-        Standard*PC*Q*ICH*|Standard*PC*i440FX*PIIX*)
+        Standard*PC*Q*ICH*|Standard*PC*i440FX*PIIX*|QEMU*|[Qq][Ee][Mm][Uu]*)
             type=qemu
             ;;
-        QEMU*Virtual*CPU*)
-            type=qemu
-            ;;
-        KVM*|[Gg][Oo][Oo][Gg][Ll][Ee]*)
+        [Kk][Vv][Mm]*|[Gg][Oo][Oo][Gg][Ll][Ee]*)
             type=kvm
             ;;
-        zvm|oracle|amazon|bochs|uml|parallels|kvm|qemu|qnx|acrn|powervm)
+        zvm|bochs|uml|qnx|acrn|powervm)
             type="${1}"
             ;;
         vm-other)
