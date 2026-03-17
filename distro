@@ -46,7 +46,7 @@
 #
 #   URL: [https://www.observium.org/files/distro]
 
-DISTROSCRIPT="2.3.5"
+DISTROSCRIPT="2.3.6"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
