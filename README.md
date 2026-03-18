@@ -7,7 +7,7 @@ Known supported
 ===============
 
 * **Linux**
-* **Free/Open/Net/Dragonfly BSD**
+* **FreeBSD, OpenBSD, NetBSD, DragonFlyBSD**
 * **Cygwin/MingW**
 * **QNX**
 * **AIX**
@@ -16,7 +16,25 @@ Known supported
 * **Hurd**
 * **Minix**
 * **VxWorks**
-* **macOS/IOS**
+* **macOS**
+
+Supported Linux distributions
+-----------------------------
+
+Debian, Ubuntu, Red Hat, CentOS, Fedora, Amazon Linux, openSUSE, SuSE, Arch Linux, Gentoo, Mageia, Slackware,
+Armbian, DietPi, OpenWrt, IPFire, Synology, Unraid,
+Mandriva, Mandrake, Knoppix, Linux-From-Scratch, Photon,
+Annvix, Arklinux, Aurox, BlackCat, Cobalt, Conectiva, FreeEOS, HLFS, Immunix,
+Linux-PPC, MkLinux, Novell Linux Desktop, PLD, Rubix, SME Server,
+Tiny Sofa, Trustix, TurboLinux, UltraPenguin, UnitedLinux, VA-Linux, Yellow Dog,
+MailCleaner
+
+Any distribution with `/etc/os-release` should also be detected automatically.
+
+Supported BSD distributions
+---------------------------
+
+pfSense, OPNsense, HardenedBSD, FreeNAS, PC-BSD
 
 Usage
 =====
