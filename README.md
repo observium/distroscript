@@ -90,8 +90,15 @@ Output:
 Installation
 ============
 
+Using curl:
 ```sh
 curl -Lo /usr/local/bin/distro https://raw.githubusercontent.com/observium/distroscript/master/distro
+chmod +x /usr/local/bin/distro
+```
+
+Using wget:
+```sh
+wget -O /usr/local/bin/distro https://raw.githubusercontent.com/observium/distroscript/master/distro
 chmod +x /usr/local/bin/distro
 ```
 
@@ -108,6 +115,9 @@ Linux|5.15.0-91-generic|amd64|Ubuntu|22.04.5||
 Run without installing:
 ```sh
 curl -Ls https://raw.githubusercontent.com/observium/distroscript/master/distro | sh
+```
+```sh
+wget -qO- https://raw.githubusercontent.com/observium/distroscript/master/distro | sh
 ```
 
 Net-SNMP integration
