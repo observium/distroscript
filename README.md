@@ -3,16 +3,6 @@ distroscript
 
 ~~Simple~~ shell script to return os/distro/version/virt info
 
-Wanted
-======
-
-Obviously to implement good support for all platforms I require at least uname outputs and/or any OS specific checks I can do, currently I need info for:
-
-* HP-UX
-* VxWorks
-* Hurd
-* Minix
-
 Known supported
 ===============
 
@@ -21,7 +11,11 @@ Known supported
 * **Cygwin/MingW**
 * **QNX**
 * **AIX**
+* **HP-UX**
 * **Solaris/SunOS**
+* **Hurd**
+* **Minix**
+* **VxWorks**
 * **macOS/IOS**
 
 Usage

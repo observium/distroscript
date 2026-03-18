@@ -62,6 +62,8 @@ getos() {
         OS="Solaris"
     elif [ "${OS}" = "DragonFly" ]; then
         OS="DragonFlyBSD"
+    elif [ "${OS}" = "GNU" ]; then
+        OS="Hurd"
     fi
     export OS
     return 0
@@ -353,6 +355,8 @@ getversion() {
     elif [ "${OS}" = "AIX" ]; then
         # ie: 6.1.0.0
         VERSION=`oslevel`
+    elif [ "${OS}" = "HP-UX" -o "${OS}" = "Hurd" -o "${OS}" = "Minix" -o "${OS}" = "VxWorks" ]; then
+        VERSION=`uname -r`
     else
         VERSION=
     fi
