@@ -36,6 +36,16 @@ Supported BSD distributions
 
 pfSense, OPNsense, HardenedBSD, FreeNAS, PC-BSD
 
+Detected virtualisation
+-----------------------
+
+VMware, Xen (HVM/PV), Microsoft Hyper-V, Parallels, KVM, QEMU, Oracle VirtualBox, bhyve, Amazon EC2
+
+Detected containers
+-------------------
+
+Docker, LXC, OpenVZ, FreeBSD Jail
+
 Usage
 =====
 
