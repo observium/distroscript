@@ -317,8 +317,8 @@ getversion() {
         elif [ "${DISTRO}" = "Unraid" ]; then
             VERSION=`cat /etc/unraid-version`
         elif [ "${DISTRO}" = "IPFire" ]; then
-            # IPFire 2.29 (aarch64) - core200 -> 2.29 CU200
-            VERSION=`awk '{ v=$2; c=$NF; sub(/.*core/, "", c); if (c+0 > 0) v=v" CU"c; print v }' /etc/system-release`
+            # PRETTY_NAME="IPFire 2.29 (aarch64) - core200" -> 2.29 CU200
+            VERSION=`echo "${PRETTY_NAME}" | awk '{ v=$2; c=$NF; sub(/.*core/, "", c); if (c+0 > 0) v=v" CU"c; print v }'`
         elif [ -f /etc/orangepi-os-version ]; then
             VERSION=`awk -F ' - ' '{ print $NF }' /etc/orangepi-os-version | sed 's/-linux.*//'`
         elif [ -f /etc/os-release ]; then
