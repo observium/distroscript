@@ -409,6 +409,10 @@ detectvirt() {
         zvm|bochs|uml|qnx|acrn|powervm)
             type="${1}"
             ;;
+        [Vv]86*)
+            # v86 is a x86 emulator running in a web browser
+            type=browservm
+            ;;
         vm-other)
             type=other
             ;;
@@ -498,6 +502,17 @@ getvirt() {
         if [ "${VIRT}" = "none" ]; then
             if [ -f /proc/cpuinfo ]; then
                 tmp=`grep 'model name' /proc/cpuinfo | cut -d\  -f3-`
+                VIRT=`detectvirt "${tmp}"`
+            fi
+        fi
+        if [ "${VIRT}" = "none" -a ! -d /sys/firmware/acpi -a ! -d /sys/class/dmi/id ]; then
+            # No ACPI and no DMI is highly atypical for both bare metal and
+            # ordinary hypervisors, but matches browser-based x86 emulators
+            # (eg v86), which advertise themselves in the ATAPI vendor string
+            # visible in kernel log:
+            #   ata2.00: ATAPI: v86 ATAPI CD-ROM, 1.00, max MWDMA2
+            tmp=`dmesg 2>/dev/null | grep -m1 -oE 'v86'`
+            if [ -n "${tmp}" ]; then
                 VIRT=`detectvirt "${tmp}"`
             fi
         fi
