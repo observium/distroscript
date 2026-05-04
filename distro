@@ -322,6 +322,7 @@ getversion() {
         elif [ -f /etc/orangepi-os-version ]; then
             VERSION=`awk -F ' - ' '{ print $NF }' /etc/orangepi-os-version | sed 's/-linux.*//'`
         elif [ -f /etc/os-release ]; then
+            unset VERSION
             . /etc/os-release
             # Debian: 12 (bookworm)
             # Ubuntu: 22.04.5 LTS (Jammy Jellyfish)
@@ -346,6 +347,7 @@ getversion() {
         esac
 
         if [ "${VERSION}" = "none" -a -f /etc/os-release ]; then
+            unset VERSION
             . /etc/os-release
             VERSION="${VERSION:-$VERSION_ID}"
             VERSION="${VERSION%% *}"
