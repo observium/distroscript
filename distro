@@ -46,7 +46,7 @@
 #
 #   URL: [https://www.observium.org/files/distro]
 
-DISTROSCRIPT="2.3.6"
+DISTROSCRIPT="2.3.7"
 
 if [ -z ${DISTROFORMAT} ]; then
     DISTROFORMAT="pipe"
@@ -326,6 +326,8 @@ getversion() {
             # Debian: 12 (bookworm)
             # Ubuntu: 22.04.5 LTS (Jammy Jellyfish)
             # Other: 2.29
+            # Alpine has no VERSION, only VERSION_ID
+            VERSION="${VERSION:-$VERSION_ID}"
             VERSION="${VERSION%% *}"
         elif [ -f /etc/redhat-release ]; then
             VERSION=`cat /etc/redhat-release | sed 's/.*release\ //' | cut -d" " -f1`
@@ -345,6 +347,7 @@ getversion() {
 
         if [ "${VERSION}" = "none" -a -f /etc/os-release ]; then
             . /etc/os-release
+            VERSION="${VERSION:-$VERSION_ID}"
             VERSION="${VERSION%% *}"
         fi
 
