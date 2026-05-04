@@ -39,7 +39,7 @@ pfSense, OPNsense, HardenedBSD, FreeNAS, PC-BSD
 Detected virtualisation
 -----------------------
 
-VMware, Xen (HVM/PV), Microsoft Hyper-V, Parallels, KVM, QEMU, Oracle VirtualBox, bhyve, Amazon EC2
+VMware, Xen (HVM/PV), Microsoft Hyper-V, Parallels, KVM, QEMU, Oracle VirtualBox, bhyve, Amazon EC2, browser-based x86 emulators (v86) reported as `browservm`
 
 Detected containers
 -------------------
